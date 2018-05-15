@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import Bean.Line;
 import Bean.MusicItem;
 
 public class TestBiz {
@@ -53,9 +54,6 @@ public class TestBiz {
         imgMap.put(121,R.drawable.bar_g_1);
         imgMap.put(122,R.drawable.bar_g_2);
         imgMap.put(123,R.drawable.bar_g_3);
-        imgMap.put(131,R.drawable.bar_b_1);
-        imgMap.put(132,R.drawable.bar_b_2);
-        imgMap.put(133,R.drawable.bar_b_3);
 
         imgMap.put(211,R.drawable.rec_y_1);
         imgMap.put(212,R.drawable.rec_y_2);
@@ -85,5 +83,30 @@ public class TestBiz {
         return Mlist;
     }
 
-
+    public boolean isAvilable(String Mode, int index, List<Line> Llist){
+        if(!Llist.isEmpty()){
+            switch (Mode){
+                case "StartIndex":{
+                    for(Line l:Llist){
+                        if(index == l.getStartItemIndex()){
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                case "EndIndex":{
+                    for(Line l:Llist){
+                        if(index == l.getEndItemIndex()){
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                default: return false;
+            }
+        }
+        else{
+            return true;
+        }
+    }
 }

@@ -30,10 +30,12 @@ public class TestActivity extends AppCompatActivity {
         DrawItemVIew MainWin = findViewById(R.id.MainWinTest);
 
         //产生图形
+        MainWin.DrawMode = 1;
         TestBiz tbiz = new TestBiz();
         List<MusicItem> Mlist = tbiz.GenItemList();
         Mlist = tbiz.getImg(Mlist, getResources());
         MainWin.setMlist(Mlist);
+        MainWin.invalidate();
 
         SubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
