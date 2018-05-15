@@ -1,5 +1,6 @@
 package com.zwiebelnx.mca_2.Act;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
@@ -10,8 +11,11 @@ import android.graphics.Paint;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.zwiebelnx.mca_2.R;
 
@@ -27,7 +31,9 @@ public class TestActivity extends AppCompatActivity {
         Button SubmitBtn = findViewById(R.id.SubmitButton_Test);
         FloatingActionButton BackBtn = findViewById(R.id.BackButton_Test);
         FloatingActionButton ShareBtn = findViewById(R.id.ShareButton_Test);
-        //FabricView MainWin = findViewById(R.id.MainWinTest);
+        MyView MainWin = findViewById(R.id.MainWin);
+
+        Context con = ((LinearLayout)findViewById(R.id.MainWinBox)).getContext();
 
         SubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,11 +50,32 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        Paint p = new Paint();
-        p.setColor(Color.RED);
-        c.drawCircle(20,20,30, p);
+    }
+
+    public class MyView extends View {
+        private Paint paint;
+
+        MyView(Context context, AttributeSet attrs){
+            super(context,attrs);
+            paint = new Paint();
+            paint.setColor(Color.RED);
+        }
+        MyView(Context context){
+            super(context);
+            paint = new Paint();
+            paint.setColor(Color.RED);
+        }
+        MyView(Context context,AttributeSet attrs,int defStyle){
+            super(context,attrs,defStyle);
+            paint = new Paint();
+            paint.setColor(Color.RED);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            canvas.drawCircle(150,150,40,paint);
+        }
     }
 
 

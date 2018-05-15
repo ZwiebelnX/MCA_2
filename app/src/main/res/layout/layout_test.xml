@@ -12,11 +12,11 @@
         android:id="@+id/ShareButton_Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
         app:backgroundTint="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/MainWinBox"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeShareDrawable" />
 
@@ -24,12 +24,11 @@
         android:id="@+id/BackButton_Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:clickable="true"
         app:backgroundTint="@android:color/transparent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/MainWinBox"
+        app:layout_constraintTop_toTopOf="@+id/MainWinBox"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
     <Button
@@ -41,8 +40,27 @@
         android:text="创作完成"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/MainWinBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/SubmitButton_Test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ShareButton_Test">
+
+        <com.zwiebelnx.mca_2.Act.TestActivity.MyView
+            android:id="@+id/MainWin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>
