@@ -1,16 +1,8 @@
 package Bean;
 
-import android.graphics.Bitmap;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-import java.util.SortedMap;
 
-import FabricView.DrawableObjects.*;
-
-public class MusicItem extends CBitmap{
-    private Map<Integer, Integer> imgs = new HashMap<Integer, Integer>();
+public class MusicItem{
     private int ShapeIndex;
     private int ColorIndex;
     private int BrightIndex;
@@ -64,7 +56,4 @@ public class MusicItem extends CBitmap{
         this.sound = sound;
     }
 
-    public Bitmap getBitmap(int i){
-
-    }
 }
