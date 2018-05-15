@@ -32,16 +32,7 @@ public class DrawItemVIew extends View {
     float UpX,UpY;
     String Warning ="";
 
-    DrawItemVIew(Context context, AttributeSet attrs){
-        super(context,attrs);
-        paint = new Paint();
-        paint.setStrokeWidth(10);
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(50);
-        paint.setColor(Color.WHITE);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-    }
-    DrawItemVIew(Context context){
+    public DrawItemVIew(Context context){
         super(context);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -50,7 +41,16 @@ public class DrawItemVIew extends View {
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
-    DrawItemVIew(Context context, AttributeSet attrs, int defStyle){
+    public DrawItemVIew(Context context, AttributeSet attrs){
+        super(context,attrs);
+        paint = new Paint();
+        paint.setStrokeWidth(10);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(50);
+        paint.setColor(Color.WHITE);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+    }
+    public DrawItemVIew(Context context, AttributeSet attrs, int defStyle){
         super(context,attrs,defStyle);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -58,7 +58,6 @@ public class DrawItemVIew extends View {
         paint.setTextSize(50);
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
-
     }
 
     @Override
@@ -72,16 +71,16 @@ public class DrawItemVIew extends View {
             }
             break;
             case 2:{
-                for(int i = 0; i<Mlist.size(); i++){
-                    canvas.drawBitmap(Mlist.get(i).getImg(),((float)Mlist.get(i).getX()),((float)Mlist.get(i).getY()),paint);
-                }
+                canvas.drawLine(DownX, DownY, UpX, UpY, paint);
                 if(!Llist.isEmpty()){
                     for(Line l:Llist){
                         canvas.drawLine(Mlist.get(l.getStartItemIndex()).getcX(), Mlist.get(l.getStartItemIndex()).getcY(),
                                 Mlist.get(l.getEndItemIndex()).getcX(), Mlist.get(l.getEndItemIndex()).getcY(), paint);
                     }
                 }
-                canvas.drawLine(DownX, DownY, UpX, UpY, paint);
+                for(int i = 0; i<Mlist.size(); i++){
+                    canvas.drawBitmap(Mlist.get(i).getImg(),((float)Mlist.get(i).getX()),((float)Mlist.get(i).getY()),paint);
+                }
                 canvas.drawText(Warning,520,1000,paint);
             }
             break;
@@ -112,28 +111,55 @@ public class DrawItemVIew extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:{
-                Log.d("Debug","Down");
                 DownX = event.getX();
                 DownY = event.getY();
                 StartItemIndex = OnItem(DownX, DownY);
-                if(testBiz.isAvilable("StartIndex",StartItemIndex,Llist)){
-                    Warning = "";
-                    if(StartItemIndex == -1){
-                        OnItem = false;
+                if(!testBiz.isAvilable("Size", StartItemIndex,Llist)){
+                    Warning = "全部结点已经被连接~";
+                    DownX=DownY=UpX=UpY=0;
+                    DrawMode = 2;
+                    invalidate();
+                }
+                else if(testBiz.isAvilable("StartIndex",StartItemIndex,Llist)){
+                    if(!Llist.isEmpty()){
+                        if(Llist.get(Llist.size()-1).getEndItemIndex()!= StartItemIndex){
+                            Warning = "请按顺序连接~";
+                            DownX=DownY=UpX=UpY=0;
+                            DrawMode = 2;
+                            invalidate();
+                        }
+                        else{
+                            Warning = "";
+                            if(StartItemIndex == -1){
+                                OnItem = false;
+                            }
+                            else{
+                                OnItem = true;
+
+                            }
+                            return true;
+                        }
                     }
                     else{
-                        OnItem = true;
+                        Warning = "";
+                        if(StartItemIndex == -1){
+                            OnItem = false;
+                        }
+                        else{
+                            OnItem = true;
 
+                        }
+                        return true;
                     }
-                    return true;
                 }
                 else{
                     DownX=DownY=UpX=UpY=0;
-                    Warning = "该结点已经被连接，请重新选择！";
+                    Warning = "该结点已经被连接，请重新选择~";
                     DrawMode = 2;
                     invalidate();
                 }
             }
+
             case MotionEvent.ACTION_MOVE:{
                 Log.d("Debug","Move");
                 if(OnItem){
@@ -146,6 +172,7 @@ public class DrawItemVIew extends View {
                 }
                 return true;
             }
+
             case MotionEvent.ACTION_UP:{
                 Log.d("Debug","Up");
                 if(OnItem){
