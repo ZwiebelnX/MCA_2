@@ -1,5 +1,7 @@
 package Bean;
 
+import android.graphics.Bitmap;
+
 import java.util.Random;
 
 public class MusicItem{
@@ -7,12 +9,13 @@ public class MusicItem{
     private int ColorIndex;
     private int BrightIndex;
     private int sound;
+    private int X,Y;
+    private Bitmap img;
 
     public MusicItem() {
         Random rand = new Random();
         sound = rand.nextInt(24)+1;//生成音调1-24
         ShapeIndex = rand.nextInt(3)+1;//生成形状号码 1-3
-
         if(ShapeIndex == 2){
             ColorIndex = rand.nextInt(2)+1; //圆形只有两种颜色
         }
@@ -23,12 +26,14 @@ public class MusicItem{
         if(sound<=8){   //不同音调对应不同的颜色深浅
             BrightIndex = 1;
         }
-        else if(sound>8 && sound<=16){
+        else if(sound<=16){
             BrightIndex = 2;
         }
         else{
             BrightIndex = 3;
         }
+        X = rand.nextInt(100)+1;
+        Y = rand.nextInt(100)+1;
 
     }
 
@@ -44,6 +49,22 @@ public class MusicItem{
         return sound;
     }
 
+    public int getBrightIndex() {
+        return BrightIndex;
+    }
+
+    public int getX() {
+        return X;
+    }
+
+    public int getY() {
+        return Y;
+    }
+
+    public Bitmap getImg() {
+        return img;
+    }
+
     public void setShapeIndex(int shapeIndex) {
         ShapeIndex = shapeIndex;
     }
@@ -56,4 +77,19 @@ public class MusicItem{
         this.sound = sound;
     }
 
+    public void setBrightIndex(int brightIndex) {
+        BrightIndex = brightIndex;
+    }
+
+    public void setX(int x) {
+        X = x;
+    }
+
+    public void setY(int y) {
+        Y = y;
+    }
+
+    public void setImg(Bitmap img) {
+        this.img = img;
+    }
 }
