@@ -1,12 +1,15 @@
 package com.zwiebelnx.mca_2.View;
 
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +17,7 @@ import java.util.List;
 import com.zwiebelnx.mca_2.Bean.Line;
 import com.zwiebelnx.mca_2.Bean.MusicItem;
 import com.zwiebelnx.mca_2.Biz.TestBiz;
-
-public class DrawItemVIew extends View {
+public class DrawItemViewTest extends View {
     List<MusicItem> Mlist;
     List<Integer> Slist;
     List<Line> Llist = new ArrayList<>();
@@ -30,7 +32,7 @@ public class DrawItemVIew extends View {
      实现父类的三个构造器 在xml解析中使用
      初始化paint的属性
      */
-    public DrawItemVIew(Context context){
+    public DrawItemViewTest(Context context){
         super(context);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -39,7 +41,7 @@ public class DrawItemVIew extends View {
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
-    public DrawItemVIew(Context context, AttributeSet attrs){
+    public DrawItemViewTest(Context context, AttributeSet attrs){
         super(context,attrs);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -48,7 +50,7 @@ public class DrawItemVIew extends View {
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
-    public DrawItemVIew(Context context, AttributeSet attrs, int defStyle){
+    public DrawItemViewTest(Context context, AttributeSet attrs, int defStyle){
         super(context,attrs,defStyle);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -59,12 +61,23 @@ public class DrawItemVIew extends View {
     }
     /* END */
 
-    static boolean  OnItem = false;
-    int StartItemIndex = -1;
-    int EndItemIndex = -1;
-    float DownX,DownY;
-    float UpX,UpY;
-    String Warning ="";
+    /*
+    Getter And Setter
+     */
+    public void setMlist(List<MusicItem> Mlist){
+        this.Mlist = Mlist;
+    }
+
+    public List<MusicItem> getMlist() {
+        return Mlist;
+    }
+
+    public List<Integer> getSlist() {
+        return Slist;
+    }
+
+    /* END */
+
     @Override
     protected void onDraw(Canvas canvas) {//绘画模式
         super.onDraw(canvas);
@@ -95,17 +108,17 @@ public class DrawItemVIew extends View {
                 for(int i = 0; i<Mlist.size(); i++){
                     canvas.drawBitmap(Mlist.get(i).getImg(),((float)Mlist.get(i).getX()),((float)Mlist.get(i).getY()),paint);
                 }
-                canvas.drawText(Warning,520,1000,paint);
             }
             break;
         }
 
     }
 
-    public void setMlist(List<MusicItem> Mlist){
-        this.Mlist = Mlist;
-    }
-
+    private  static boolean  OnItem = false;
+    private int StartItemIndex = -1;
+    private int EndItemIndex = -1;
+    private float DownX,DownY;
+    private float UpX,UpY;
     /*
      判断是否触摸在图形上
      */
@@ -127,6 +140,7 @@ public class DrawItemVIew extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        MediaPlayer player = new MediaPlayer();
         try{
         } catch(Exception e){
             e.printStackTrace();
@@ -137,7 +151,7 @@ public class DrawItemVIew extends View {
                 DownY = event.getY();
                 StartItemIndex = OnItem(DownX, DownY);
                 if(!testBiz.isAvilable("Size", StartItemIndex,Llist)){//若已经存在6条连接线 则拒绝用户操作
-                    Warning = "全部结点已经被连接~";
+                    Toast.makeText(super.getContext(),"全部结点已经被链接 点击播放试听", Toast.LENGTH_SHORT).show();
                     DownX=DownY=UpX=UpY=0;
                     DrawMode = 2;
                     invalidate();
@@ -145,31 +159,33 @@ public class DrawItemVIew extends View {
                 else if(testBiz.isAvilable("StartIndex",StartItemIndex,Llist)){
                     if(!Llist.isEmpty()){
                         if(Llist.get(Llist.size()-1).getEndItemIndex()!= StartItemIndex){//限制 必须按顺序连接
-                            Warning = "请按顺序连接~";
+                            Toast.makeText(super.getContext(),"请按顺序连接~", Toast.LENGTH_SHORT).show();
                             DownX=DownY=UpX=UpY=0;
                             DrawMode = 2;
                             invalidate();
                             return true;
                         }
                     }
-                    Warning = "";
+                    try{
+                        player.setDataSource(Mlist.get(StartItemIndex).getMusicFlieUrl());
+                        player.prepare();
+                        player.start();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                     if(StartItemIndex == -1){
                         OnItem = false;
                     }
                     else{
                         OnItem = true;
-                        try{
 
-                        } catch (Exception e){
-                            e.printStackTrace();
-                        }
                     }
                     return true;
 
                 }
                 else{//限制 一个结点只能作为起点和终点各一次
                     DownX=DownY=UpX=UpY=0;
-                    Warning = "该结点已经被连接，请重新选择~";
+                    Toast.makeText(super.getContext(),"该结点已被链接 请重新选择~", Toast.LENGTH_SHORT).show();
                     DrawMode = 2;
                     invalidate();
                 }
@@ -197,7 +213,6 @@ public class DrawItemVIew extends View {
                     }
                     else{
                         if(testBiz.isAvilable("EndIndex", EndItemIndex, Llist)){//连接两个节点 将连线加入连线列表
-                            Warning = "";
                             UpX = Mlist.get(EndItemIndex).getcX();
                             UpY = Mlist.get(EndItemIndex).getcY();
                             OnItem = false;
@@ -209,7 +224,7 @@ public class DrawItemVIew extends View {
                         }
                         else{
                             DownX=DownY=UpX=UpY=0;
-                            Warning = "该结点已经被连接，请重新选择！";
+                            Toast.makeText(super.getContext(),"该结点已经被连接 请重新选择~", Toast.LENGTH_SHORT).show();
                             DrawMode = 2;
                             invalidate();
                         }

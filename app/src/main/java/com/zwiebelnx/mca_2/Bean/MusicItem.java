@@ -1,8 +1,16 @@
 package com.zwiebelnx.mca_2.Bean;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
+import com.zwiebelnx.mca_2.Biz.Midi.MidiUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * 音乐图形属性类：
@@ -12,6 +20,7 @@ import java.util.Random;
  * 在DrawItemView中调用
  */
 public class MusicItem{
+    private static int index = 0;
     private int ShapeIndex;
     private int ColorIndex;
     private int BrightIndex;
@@ -19,10 +28,11 @@ public class MusicItem{
     private int X,Y; //图形坐标 在左上角
     private int cX, cY; //修正坐标
     private Bitmap img;
+    private String MusicFlieUrl;
 
     public MusicItem() {
         Random rand = new Random();
-        sound = rand.nextInt(21)+1;//生成音调1-21
+        sound = rand.nextInt(21)+1+0x30;//生成音调1-21
         ShapeIndex = rand.nextInt(3)+1;//生成形状号码 1-3
         if(ShapeIndex != 3){
             ColorIndex = rand.nextInt(2)+1; //圆形只有两种颜色
@@ -42,9 +52,15 @@ public class MusicItem{
         }
         X = rand.nextInt(100)+1;
         Y = rand.nextInt(100)+1;
-        currectXY();
 
+        currectXY();
+        MusicFlieUrl = GenerateFlieAndUrl();
+        index++;
     }
+
+    /*
+    Getter And Setter
+     */
 
     public int getShapeIndex() {
         return ShapeIndex;
@@ -74,6 +90,14 @@ public class MusicItem{
         return img;
     }
 
+    public static int getIndex() {
+        return index;
+    }
+
+    public String getMusicFlieUrl() {
+        return MusicFlieUrl;
+    }
+
     public int getcX() {
         return cX;
     }
@@ -92,6 +116,7 @@ public class MusicItem{
 
     public void setSound(int sound) {
         this.sound = sound;
+        MusicFlieUrl = GenerateFlieAndUrl();
     }
 
     public void setBrightIndex(int brightIndex) {
@@ -112,6 +137,9 @@ public class MusicItem{
         this.img = img;
     }
 
+
+    /* END */
+
     /*
      * 图形修正坐标函数
      */
@@ -124,5 +152,25 @@ public class MusicItem{
             cX = X + 60;
             cY = Y + 60;
         }
+    }
+
+    /*
+    产生单音节声音资源 为后面播放提供资源调用
+     */
+    private String GenerateFlieAndUrl(){
+        List<Integer> pitch = new ArrayList<>();
+        pitch.add(sound);
+        String url = "/storage/emulated/0/MCA/Item"+index+"pitch.mid";
+        try{
+            FileOutputStream fos=new FileOutputStream(url);
+            byte[] data= MidiUtils.Generate(pitch, 0);
+            fos.write(data);
+            fos.flush();
+            fos.close();
+        } catch(Exception e){
+            e.printStackTrace();
+            Log.d("Debug","Create .mid error!");
+        }
+        return url;
     }
 }

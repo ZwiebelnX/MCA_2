@@ -54,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <View.DrawItemVIew
+        <com.zwiebelnx.mca_2.View.DrawItemViewTest
             android:id="@+id/MainWinCreate"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

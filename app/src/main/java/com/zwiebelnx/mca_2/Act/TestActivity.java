@@ -14,7 +14,7 @@ import java.util.List;
 
 import com.zwiebelnx.mca_2.Bean.MusicItem;
 import com.zwiebelnx.mca_2.Biz.TestBiz;
-import com.zwiebelnx.mca_2.View.DrawItemVIew;
+import com.zwiebelnx.mca_2.View.DrawItemViewTest;
 
 
 public class TestActivity extends AppCompatActivity {
@@ -25,9 +25,10 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.layout_test);
 
         Button SubmitBtn = findViewById(R.id.SubmitButton_Test);
+        Button PlayBtn = findViewById(R.id.PlayButton_Test);
         FloatingActionButton BackBtn = findViewById(R.id.BackButton_Test);
         FloatingActionButton ShareBtn = findViewById(R.id.ShareButton_Test);
-        DrawItemVIew MainWin = findViewById(R.id.MainWinTest);
+        final DrawItemViewTest MainWin = findViewById(R.id.MainWinTest);
 
         /*
          产生初始化图形
@@ -40,6 +41,13 @@ public class TestActivity extends AppCompatActivity {
         MainWin.invalidate();
 
         SubmitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        PlayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

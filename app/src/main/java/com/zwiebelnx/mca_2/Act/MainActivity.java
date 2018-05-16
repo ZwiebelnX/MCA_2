@@ -1,7 +1,10 @@
 package com.zwiebelnx.mca_2.Act;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.zwiebelnx.mca_2.R;
+
+import java.io.File;
 
 
 /**
@@ -24,6 +29,19 @@ public class MainActivity extends AppCompatActivity {
         Button TestBtn = findViewById(R.id.TestButton);
         FloatingActionButton InfoBtn = findViewById(R.id.InfoButton);
 
+
+        if(Build.VERSION.SDK_INT >= 23){
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+            };
+            for(String str: permissions){
+                if(this.checkSelfPermission (str) != PackageManager.PERMISSION_GRANTED){
+                    this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                }
+            }
+        }
         /*
          创建按键监听器
          跳转至相应Act
