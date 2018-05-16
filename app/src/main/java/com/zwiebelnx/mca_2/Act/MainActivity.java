@@ -1,7 +1,6 @@
 package com.zwiebelnx.mca_2.Act;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.zwiebelnx.mca_2.R;
+import com.zwiebelnx.mca_2.Anim.AllAnim;
 
 import java.io.File;
 
@@ -77,7 +77,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ButtonShow();
+        //ButtonShow();
+        CreateBtn.startAnimation(AllAnim.showUp(200));
+        TestBtn.startAnimation(AllAnim.showUp(400));
+        InfoBtn.startAnimation(AllAnim.showUp(600));
+
+
     }
 
 
@@ -85,7 +90,10 @@ public class MainActivity extends AppCompatActivity {
      动画创建
      */
 
-    private void ButtonShow(){
+
+
+
+    /*private void ButtonShow(){
         ObjectAnimator alphaCreate = ObjectAnimator.ofFloat(findViewById(R.id.CreateButton),"alpha",0f,1f);
         ObjectAnimator alphaTest = ObjectAnimator.ofFloat(findViewById(R.id.TestButton),"alpha", 0f, 1f);
         alphaCreate.setDuration(1500);
@@ -93,5 +101,5 @@ public class MainActivity extends AppCompatActivity {
         alphaTest.setStartDelay(300);
         alphaCreate.start();
         alphaTest.start();
-    }
+    }*/
 }

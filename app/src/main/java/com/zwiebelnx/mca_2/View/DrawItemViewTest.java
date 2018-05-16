@@ -235,6 +235,8 @@ public class DrawItemViewTest extends View {
 
             case MotionEvent.ACTION_UP:{//抬起操作
                 if(OnItem){
+                    UpX = event.getX();
+                    UpY = event.getY();
                     EndItemIndex = OnItem(UpX,UpY);
                     if(StartItemIndex == -1|| EndItemIndex == -1 || StartItemIndex==EndItemIndex){//起点 终点不是图形或者起点等于终点时不允许连线
                         OnItem = false;

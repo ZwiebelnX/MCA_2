@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.zwiebelnx.mca_2.Biz.Midi.MidiUtils;
 import com.zwiebelnx.mca_2.R;
@@ -74,18 +75,23 @@ public class TestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 List<Integer> Slist = MainWin.getSlist();
                 String url = "/storage/emulated/0/MCA/Result.mid";
-                try {
-                    FileOutputStream fos = new FileOutputStream(url);
-                    byte[] data = MidiUtils.Generate(Slist, 0);
-                    fos.write(data);
-                    fos.flush();
-                    fos.close();
-                    MediaPlayer player = new MediaPlayer();
-                    player.setDataSource(url);
-                    player.prepare();
-                    player.start();
-                } catch (Exception e){
-                    e.printStackTrace();
+                if(Slist.isEmpty()){
+                    Toast.makeText(TestActivity.this,"要把七个全部连完喔", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        FileOutputStream fos = new FileOutputStream(url);
+                        byte[] data = MidiUtils.Generate(Slist, 0);
+                        fos.write(data);
+                        fos.flush();
+                        fos.close();
+                        MediaPlayer player = new MediaPlayer();
+                        player.setDataSource(url);
+                        player.prepare();
+                        player.start();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
             }
