@@ -32,7 +32,12 @@ public class MusicItem{
 
     public MusicItem() {
         Random rand = new Random();
-        sound = rand.nextInt(21)+1+0x30;//生成音调1-21
+        for(;;){
+            sound = rand.nextInt(21)+1+0x40;//生成音调1-21
+            if(sound%2 == 0){
+                break;
+            }
+        }
         ShapeIndex = rand.nextInt(3)+1;//生成形状号码 1-3
         if(ShapeIndex != 3){
             ColorIndex = rand.nextInt(2)+1; //圆形只有两种颜色

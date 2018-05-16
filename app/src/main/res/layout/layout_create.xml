@@ -8,30 +8,6 @@
     tools:context=".Act.CreateActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <Button
-        android:id="@+id/SubmitButton_Create"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:background="@drawable/button_shape"
-        android:text="创作完成"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/ShareButton_Create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:elevation="4dp"
-        app:backgroundTint="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeShareDrawable" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/BackButton_Create"
         android:layout_width="wrap_content"
@@ -47,14 +23,12 @@
 
     <LinearLayout
         android:id="@+id/MainWinBoxCreate"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="48dp"
+        android:layout_width="368dp"
+        android:layout_height="486dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -65,5 +39,84 @@
             android:layout_height="match_parent" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/PreView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/button_shape" />
+
+    <Button
+        android:id="@+id/ItemColorButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/button_create_item"
+        android:text="颜色"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ItemBrightButton" />
+
+    <Button
+        android:id="@+id/PlayButton_Create"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/button_shape"
+        android:text="试听"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ShareButton_Create" />
+
+    <Button
+        android:id="@+id/ItemBrightButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/button_create_item"
+        android:text="深浅"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ItemPitchButton" />
+
+    <Button
+        android:id="@+id/ItemPitchButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/button_create_item"
+        android:text="音高"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/PlayButton_Create" />
+
+    <Button
+        android:id="@+id/ShareButton_Create"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_shape"
+        android:text="分享"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/ItemShapeButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/button_create_item"
+        android:text="形状"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ItemColorButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

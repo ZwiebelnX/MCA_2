@@ -16,22 +16,13 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_create);
 
-        Button SubmitBtn = findViewById(R.id.SubmitButton_Create);
-        FloatingActionButton BackBtn = findViewById(R.id.BackButton_Create);
-        FloatingActionButton ShareBtn = findViewById(R.id.ShareButton_Create);
+        Button BackBtn = findViewById(R.id.BackButton_Create);
+        Button ShareBtn = findViewById(R.id.ShareButton_Create);
+        Button PlayBtn = findViewById(R.id.PlayButton_Create);
 
-        SubmitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        BackBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent BackToMain = new Intent("com.zwiebelnx.mca.BACKTOMAIN");
-                startActivity(BackToMain);
-            }
-        });
+        Button ItemShapeBtn = findViewById(R.id.ItemShapeButton);
+        Button ItemColorBtn = findViewById(R.id.ItemColorButton);
+        Button ItemBrightBtn = findViewById(R.id.ItemBrightButton);
+        Button ItemPitchBtn = findViewById(R.id.ItemPitchButton);
     }
 }

@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.zwiebelnx.mca_2.R;
 import com.zwiebelnx.mca_2.Anim.AllAnim;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         Button CreateBtn = findViewById(R.id.CreateButton);
         Button TestBtn = findViewById(R.id.TestButton);
         FloatingActionButton InfoBtn = findViewById(R.id.InfoButton);
+        ImageView LogoMain = findViewById(R.id.LogoMain);
+
 
         /*
         Android 6.0 以上动态权限的申请
@@ -77,29 +81,52 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //ButtonShow();
-        CreateBtn.startAnimation(AllAnim.showUp(200));
-        TestBtn.startAnimation(AllAnim.showUp(400));
-        InfoBtn.startAnimation(AllAnim.showUp(600));
-
-
+        LogoMain.startAnimation(AllAnim.showUp(0, AllAnim.DIRECTION_FROM_CENTER));
+        CreateBtn.startAnimation(AllAnim.showUp(200, AllAnim.DIRECTION_FROM_RIGHT));
+        TestBtn.startAnimation(AllAnim.showUp(400, AllAnim.DIRECTION_FROM_RIGHT));
+        InfoBtn.startAnimation(AllAnim.showUp(600, AllAnim.DIRECTION_FROM_RIGHT));
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setContentView(R.layout.layout_main);
+        Button CreateBtn = findViewById(R.id.CreateButton);
+        Button TestBtn = findViewById(R.id.TestButton);
+        FloatingActionButton InfoBtn = findViewById(R.id.InfoButton);
+        ImageView LogoMain = findViewById(R.id.LogoMain);
 
-    /*
-     动画创建
-     */
+        /*
+         创建按键监听器
+         跳转至相应Act
+         */
+        CreateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ToCreate = new Intent(MainActivity.this, CreateActivity.class);
+                startActivity(ToCreate);
+            }
+        });
+        TestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ToTest = new Intent(MainActivity.this, TestActivity.class);
+                startActivity(ToTest);
+            }
+        });
+        InfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
-
-
-    /*private void ButtonShow(){
-        ObjectAnimator alphaCreate = ObjectAnimator.ofFloat(findViewById(R.id.CreateButton),"alpha",0f,1f);
-        ObjectAnimator alphaTest = ObjectAnimator.ofFloat(findViewById(R.id.TestButton),"alpha", 0f, 1f);
-        alphaCreate.setDuration(1500);
-        alphaTest.setDuration(1500);
-        alphaTest.setStartDelay(300);
-        alphaCreate.start();
-        alphaTest.start();
-    }*/
+        /*
+        动画处理
+         */
+        LogoMain.startAnimation(AllAnim.showUp(0, AllAnim.DIRECTION_FROM_CENTER));
+        CreateBtn.startAnimation(AllAnim.showUp(200, AllAnim.DIRECTION_FROM_RIGHT));
+        TestBtn.startAnimation(AllAnim.showUp(400, AllAnim.DIRECTION_FROM_RIGHT));
+        InfoBtn.startAnimation(AllAnim.showUp(600, AllAnim.DIRECTION_FROM_RIGHT));
+    }
 }

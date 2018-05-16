@@ -64,7 +64,7 @@ public class TestActivity extends AppCompatActivity {
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-                MainWin.setTestResult(TestBiz.getTest(MainWin.getSlist(), getResources(), 0x3c));
+                MainWin.setTestResult(TestBiz.getTest(MainWin.getSlist(), getResources(), 0x4c));
                 MainWin.setDrawMode(3);
                 MainWin.invalidate();
             }

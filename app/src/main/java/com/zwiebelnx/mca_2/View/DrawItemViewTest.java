@@ -1,11 +1,13 @@
 package com.zwiebelnx.mca_2.View;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +38,7 @@ public class DrawItemViewTest extends View {
         paint = new Paint();
         paint.setStrokeWidth(10);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(50);
+        paint.setTextSize(40);
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
@@ -45,7 +47,7 @@ public class DrawItemViewTest extends View {
         paint = new Paint();
         paint.setStrokeWidth(10);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(50);
+        paint.setTextSize(40);
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
@@ -54,7 +56,7 @@ public class DrawItemViewTest extends View {
         paint = new Paint();
         paint.setStrokeWidth(10);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(50);
+        paint.setTextSize(40);
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
@@ -130,7 +132,13 @@ public class DrawItemViewTest extends View {
             绘制测试结果
              */
             case 3:{
-                canvas.drawText(TestResult, 50, 50, paint);
+                TextPaint textPaint = new TextPaint(paint);
+                StaticLayout staticLayout = new StaticLayout(TestResult, textPaint, getWidth(), Layout.Alignment.ALIGN_NORMAL,
+                        1.0f, 0f, true);
+                canvas.translate(500,400);
+                //canvas.clipRect(0,0,0,600);
+                canvas.drawColor(0xFF64a7ff);
+                staticLayout.draw(canvas);
             }
 
             default:
