@@ -12,6 +12,10 @@ import android.widget.LinearLayout;
 
 import com.zwiebelnx.mca_2.R;
 
+
+/**
+ * 只允许存在一个MainActivity
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -23,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton InfoBtn = findViewById(R.id.InfoButton);
 
         /*
-         * 创建按键监听器
-         * 跳转至相应Act
+         创建按键监听器
+         跳转至相应Act
          */
         CreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-     * 动画创建
+     动画创建
      */
+
     private void ButtonShow(){
         ObjectAnimator alphaCreate = ObjectAnimator.ofFloat(findViewById(R.id.CreateButton),"alpha",0f,1f);
         ObjectAnimator alphaTest = ObjectAnimator.ofFloat(findViewById(R.id.TestButton),"alpha", 0f, 1f);

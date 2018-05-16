@@ -1,5 +1,10 @@
 package Bean;
 
+
+/**
+ * 连线属性类
+ * 在DrawItemView中作为绘图以及获取音高pitch使用
+ */
 public class Line {
     private int startItemIndex;
     private int EndItemIndex;

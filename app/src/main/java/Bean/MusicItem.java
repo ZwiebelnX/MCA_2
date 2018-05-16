@@ -4,13 +4,20 @@ import android.graphics.Bitmap;
 
 import java.util.Random;
 
+/**
+ * 音乐图形属性类：
+ * 包含音乐图形的形状、颜色、亮度
+ * 在画布上的座标、图形中心的修正坐标
+ * 图形的位图资源
+ * 在DrawItemView中调用
+ */
 public class MusicItem{
     private int ShapeIndex;
     private int ColorIndex;
     private int BrightIndex;
     private int sound;
     private int X,Y; //图形坐标 在左上角
-    private int cX, cY; //修正坐标 在图形中央 用于绘图
+    private int cX, cY; //修正坐标
     private Bitmap img;
 
     public MusicItem() {
@@ -105,6 +112,9 @@ public class MusicItem{
         this.img = img;
     }
 
+    /*
+     * 图形修正坐标函数
+     */
     private void currectXY(){
         if(getShapeIndex()==1){
             cX = X + 40;
