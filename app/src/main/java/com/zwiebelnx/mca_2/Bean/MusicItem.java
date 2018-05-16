@@ -169,7 +169,6 @@ public class MusicItem{
             fos.close();
         } catch(Exception e){
             e.printStackTrace();
-            Log.d("Debug","Create .mid error!");
         }
         return url;
     }

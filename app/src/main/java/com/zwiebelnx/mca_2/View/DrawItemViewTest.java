@@ -134,6 +134,15 @@ public class DrawItemViewTest extends View {
         return -1;
     }
 
+    private List<Integer> SetSlist(List<Line> Llist, List<MusicItem> Mlist){
+        List<Integer> Slist = new ArrayList<>();
+        Slist.add(Mlist.get(Llist.get(0).getStartItemIndex()).getSound());
+        Slist.add(Mlist.get(Llist.get(0).getEndItemIndex()).getSound());
+        for(int i = 1; i < Llist.size(); i++){
+            Slist.add(Mlist.get(Llist.get(i).getEndItemIndex()).getSound());
+        }
+        return Slist;
+    }
     /**
      * DrawItemView的触摸事件：
      * 处理用户按下、移动、抬起时 画布上连线以及各种限制
@@ -141,10 +150,6 @@ public class DrawItemViewTest extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         MediaPlayer player = new MediaPlayer();
-        try{
-        } catch(Exception e){
-            e.printStackTrace();
-        }
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:{//按下操作
                 DownX = event.getX();
@@ -220,6 +225,9 @@ public class DrawItemViewTest extends View {
                             Llist.add(l);
                             DrawMode = 2;
                             invalidate();
+                            if(Llist.size() == 6){
+                                Slist = SetSlist(Llist,Mlist);
+                            }
 
                         }
                         else{
