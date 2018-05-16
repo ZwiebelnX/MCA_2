@@ -12,9 +12,9 @@ import com.zwiebelnx.mca_2.R;
 
 import java.util.List;
 
-import Bean.MusicItem;
-import Biz.TestBiz;
-import View.DrawItemVIew;
+import com.zwiebelnx.mca_2.Bean.MusicItem;
+import com.zwiebelnx.mca_2.Biz.TestBiz;
+import com.zwiebelnx.mca_2.View.DrawItemVIew;
 
 
 public class TestActivity extends AppCompatActivity {
