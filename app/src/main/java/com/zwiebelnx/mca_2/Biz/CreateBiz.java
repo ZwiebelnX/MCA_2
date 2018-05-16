@@ -3,18 +3,21 @@ package com.zwiebelnx.mca_2.Biz;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.ImageView;
 
+import com.zwiebelnx.mca_2.Bean.Line;
+import com.zwiebelnx.mca_2.Bean.MusicItem;
 import com.zwiebelnx.mca_2.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.zwiebelnx.mca_2.Bean.Line;
-import com.zwiebelnx.mca_2.Bean.MusicItem;
+/**
+ * Created by Chen Sicong on 2018/5/16.\
+ *
+ */
 
-public class TestBiz {
+public class CreateBiz {
 
     /*
      * 产生数量为7的图形链表
@@ -54,7 +57,7 @@ public class TestBiz {
         Bitmap bitmap;
         int id;
 
-        imgMap.put(111,R.drawable.bar_y_1);
+        imgMap.put(111, R.drawable.bar_y_1);
         imgMap.put(112,R.drawable.bar_y_2);
         imgMap.put(113,R.drawable.bar_y_3);
         imgMap.put(121,R.drawable.bar_g_1);
@@ -128,52 +131,4 @@ public class TestBiz {
             return true;
         }
     }
-
-    /*
-    分析算法
-     */
-    public static String getTest(List<Integer> pitchs,Resources r,int MID_PITCH) {
-        int id=0;
-        int break0=(int)Math.round(pitchs.size()*0.35);
-        int break1=(int)Math.round(pitchs.size()*0.65);
-        int count_l_f=0,count_l_m=0,count_l_b=0;
-        int count_h_f=0,count_h_m=0,count_h_b=0;
-        for(int i=0;i<break0;i++) {
-            if(pitchs.get(i)<MID_PITCH) {
-                count_l_f++;
-            }else {
-                count_h_f++;
-            }
-        }
-        for(int i=break0;i<break1;i++) {
-            if(pitchs.get(i)<MID_PITCH) {
-                count_l_m++;
-            }else {
-                count_h_m++;
-            }
-        }
-        for(int i=break1;i<pitchs.size();i++) {
-            if(pitchs.get(i)<MID_PITCH) {
-                count_l_b++;
-            }else {
-                count_h_b++;
-            }
-        }
-        if(count_l_f>=count_l_m+count_l_b) {
-            id=0;
-        }else if(count_l_m>=count_l_f+count_l_b) {
-            id=1;
-        }else {
-            id=2;
-        }
-        if(count_h_f>=count_h_m+count_h_b) {
-            id=0;
-        }else if(count_h_m>=count_h_f+count_h_b) {
-            id+=3;
-        }else {
-            id+=6;
-        }
-        return r.getStringArray(R.array.Ana)[id];
-    }
-
 }

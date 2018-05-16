@@ -12,64 +12,58 @@
         android:id="@+id/ShareButton_Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
         android:clickable="true"
         app:backgroundTint="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="@+id/MainWinBoxTest"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/MainWinBoxTest"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="?attr/actionModeShareDrawable" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/BackButton_Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:clickable="true"
         app:backgroundTint="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="@+id/MainWinBoxTest"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/MainWinBoxTest"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
     <Button
         android:id="@+id/SubmitButton_Test"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/button_shape"
         android:text="创作完成"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/PlayButton_Test"
-        app:layout_constraintTop_toBottomOf="@+id/floatingActionButton" />
+        app:layout_constraintStart_toEndOf="@+id/PlayButton_Test" />
 
     <Button
         android:id="@+id/PlayButton_Test"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/button_shape"
         android:text="播放"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/SubmitButton_Test"
         app:layout_constraintEnd_toStartOf="@+id/SubmitButton_Test"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/MainWinBoxTest"
-        android:layout_width="0dp"
-        android:layout_height="389dp"
-        android:layout_marginBottom="52dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="384dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="57dp"
+        android:layout_marginTop="57dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.364">
+        app:layout_constraintEnd_toEndOf="@+id/PlayButton_Test"
+        app:layout_constraintStart_toEndOf="@+id/PlayButton_Test"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.zwiebelnx.mca_2.View.DrawItemViewTest
             android:id="@+id/MainWinTest"
@@ -86,8 +80,8 @@
         android:clickable="true"
         android:src="?android:attr/listChoiceIndicatorSingle"
         app:layout_constraintBottom_toTopOf="@+id/PlayButton_Test"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/PlayButton_Test"
+        app:layout_constraintStart_toEndOf="@+id/PlayButton_Test" />
 
 
 </android.support.constraint.ConstraintLayout>

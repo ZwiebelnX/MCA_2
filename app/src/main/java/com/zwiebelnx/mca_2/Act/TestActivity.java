@@ -20,6 +20,8 @@ import com.zwiebelnx.mca_2.Bean.MusicItem;
 import com.zwiebelnx.mca_2.Biz.TestBiz;
 import com.zwiebelnx.mca_2.View.DrawItemViewTest;
 
+import junit.framework.Test;
+
 
 public class TestActivity extends AppCompatActivity {
 
@@ -37,17 +39,33 @@ public class TestActivity extends AppCompatActivity {
         /*
          产生初始化图形
          */
-        MainWin.DrawMode = 1;
-        TestBiz tbiz = new TestBiz();
-        List<MusicItem> Mlist = tbiz.GenItemList();
-        Mlist = tbiz.getImg(Mlist, getResources());
+        MainWin.setDrawMode(1);
+        List<MusicItem> Mlist = TestBiz.GenItemList();
+        Mlist = TestBiz.getImg(Mlist, getResources());
         MainWin.setMlist(Mlist);
         MainWin.invalidate();
 
         SubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                List<Integer> Slist = MainWin.getSlist();
+                String url = "/storage/emulated/0/MCA/Result.mid";
+                try {
+                    FileOutputStream fos = new FileOutputStream(url);
+                    byte[] data = MidiUtils.Generate(Slist, 0);
+                    fos.write(data);
+                    fos.flush();
+                    fos.close();
+                    MediaPlayer player = new MediaPlayer();
+                    player.setDataSource(url);
+                    player.prepare();
+                    player.start();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                MainWin.setTestResult(TestBiz.getTest(MainWin.getSlist(), getResources(), 0x3c));
+                MainWin.setDrawMode(3);
+                MainWin.invalidate();
             }
         });
 

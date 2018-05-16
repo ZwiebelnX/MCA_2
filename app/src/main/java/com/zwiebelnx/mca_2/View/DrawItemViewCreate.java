@@ -1,8 +1,6 @@
 package com.zwiebelnx.mca_2.View;
 
-import android.app.Application;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
@@ -11,27 +9,35 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.zwiebelnx.mca_2.Bean.Line;
+import com.zwiebelnx.mca_2.Bean.MusicItem;
+import com.zwiebelnx.mca_2.Biz.CreateBiz;
+import com.zwiebelnx.mca_2.Biz.TestBiz;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zwiebelnx.mca_2.Bean.Line;
-import com.zwiebelnx.mca_2.Bean.MusicItem;
-import com.zwiebelnx.mca_2.Biz.TestBiz;
-public class DrawItemViewTest extends View {
-    List<MusicItem> Mlist;
-    List<Integer> Slist;
-    List<Line> Llist = new ArrayList<>();
+/**
+ * Created by Chen Sicong on 2018/5/16.
+ *
+ */
+
+public class DrawItemViewCreate extends View {
     private Paint paint;
+
+    private List<MusicItem> Mlist;
+    private List<Integer> Slist;
+    private List<Line> Llist = new ArrayList<>();
     private static int DrawMode;//1=放置物品 2=画线
     private String TestResult;
 
     private static final int IMG_RANGE=100;
 
     /*
-     实现父类的三个构造器 在xml解析中使用
-     初始化paint的属性
-     */
-    public DrawItemViewTest(Context context){
+    实现父类的三个构造器 在xml解析中使用
+    初始化paint的属性
+    */
+    public DrawItemViewCreate(Context context){
         super(context);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -40,7 +46,7 @@ public class DrawItemViewTest extends View {
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
-    public DrawItemViewTest(Context context, AttributeSet attrs){
+    public DrawItemViewCreate(Context context, AttributeSet attrs){
         super(context,attrs);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -49,7 +55,7 @@ public class DrawItemViewTest extends View {
         paint.setColor(Color.WHITE);
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
-    public DrawItemViewTest(Context context, AttributeSet attrs, int defStyle){
+    public DrawItemViewCreate(Context context, AttributeSet attrs, int defStyle){
         super(context,attrs,defStyle);
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -62,7 +68,7 @@ public class DrawItemViewTest extends View {
 
     /*
     Getter And Setter
-     */
+    */
     public void setMlist(List<MusicItem> Mlist){
         this.Mlist = Mlist;
     }
@@ -93,60 +99,12 @@ public class DrawItemViewTest extends View {
 
     /* END */
 
-    @Override
-    protected void onDraw(Canvas canvas) {//绘画模式
-        super.onDraw(canvas);
-        switch (DrawMode){
-            /*
-             初始化界面和布置随机图形
-             在TestActivity的OnCreate ResetBtn的OnClick中调用
-             */
-            case 1:{
-                for(MusicItem m:Mlist){
-                    canvas.drawBitmap(m.getImg(),m.getX(),m.getY(),paint);
-                }
-            }
-            break;
-
-            /*
-             绘制图形和连线
-             在类内的TouchEvent和RedoBtn的OnClick中调用
-             */
-            case 2:{
-                canvas.drawLine(DownX, DownY, UpX, UpY, paint);
-                if(!Llist.isEmpty()){
-                    for(Line l:Llist){
-                        canvas.drawLine(Mlist.get(l.getStartItemIndex()).getcX(), Mlist.get(l.getStartItemIndex()).getcY(),
-                                Mlist.get(l.getEndItemIndex()).getcX(), Mlist.get(l.getEndItemIndex()).getcY(), paint);
-                    }
-                }
-                for(int i = 0; i<Mlist.size(); i++){
-                    canvas.drawBitmap(Mlist.get(i).getImg(),((float)Mlist.get(i).getX()),((float)Mlist.get(i).getY()),paint);
-                }
-            }
-            break;
-
-            /*
-            绘制测试结果
-             */
-            case 3:{
-                canvas.drawText(TestResult, 50, 50, paint);
-            }
-
-            default:
-                break;
-        }
-
-    }
-
     private  static boolean  OnItem = false;
     private int StartItemIndex = -1;
     private int EndItemIndex = -1;
     private float DownX,DownY;
     private float UpX,UpY;
-    /*
-     判断是否触摸在图形上
-     */
+
     public int OnItem(float X, float Y){
         for(int i = 0 ; i<Mlist.size();i++){
             float imgX = (float)Mlist.get(i).getcX();
@@ -180,13 +138,13 @@ public class DrawItemViewTest extends View {
                 DownX = event.getX();
                 DownY = event.getY();
                 StartItemIndex = OnItem(DownX, DownY);
-                if(!TestBiz.isAvilable("Size", StartItemIndex,Llist)){//若已经存在6条连接线 则拒绝用户操作
+                if(!CreateBiz.isAvilable("Size", StartItemIndex,Llist)){//若已经存在6条连接线 则拒绝用户操作
                     Toast.makeText(super.getContext(),"全部结点已经被链接 点击播放试听", Toast.LENGTH_SHORT).show();
                     DownX=DownY=UpX=UpY=0;
                     DrawMode = 2;
                     invalidate();
                 }
-                else if(TestBiz.isAvilable("StartIndex",StartItemIndex,Llist)){
+                else if(CreateBiz.isAvilable("StartIndex",StartItemIndex,Llist)){
                     if(!Llist.isEmpty()){
                         if(Llist.get(Llist.size()-1).getEndItemIndex()!= StartItemIndex){//限制 必须按顺序连接
                             Toast.makeText(super.getContext(),"请按顺序连接~", Toast.LENGTH_SHORT).show();
@@ -242,8 +200,8 @@ public class DrawItemViewTest extends View {
                         invalidate();
                     }
                     else{
-                        if(TestBiz.isAvilable("EndIndex", EndItemIndex, Llist)){//连接两个节点 将连线加入连线列表
-                            if(TestBiz.isAvilable("Loop", EndItemIndex, Llist)){
+                        if(CreateBiz.isAvilable("EndIndex", EndItemIndex, Llist)){//连接两个节点 将连线加入连线列表
+                            if(CreateBiz.isAvilable("Loop", EndItemIndex, Llist)){
                                 UpX = Mlist.get(EndItemIndex).getcX();
                                 UpY = Mlist.get(EndItemIndex).getcY();
                                 OnItem = false;

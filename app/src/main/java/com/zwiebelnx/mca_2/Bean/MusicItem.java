@@ -55,7 +55,12 @@ public class MusicItem{
 
         currectXY();
         MusicFlieUrl = GenerateFlieAndUrl();
-        index++;
+        if(index == 7){
+            index = 0;
+        }
+        else{
+            index++;
+        }
     }
 
     /*

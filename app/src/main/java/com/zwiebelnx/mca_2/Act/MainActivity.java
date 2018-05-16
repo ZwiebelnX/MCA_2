@@ -29,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
         Button TestBtn = findViewById(R.id.TestButton);
         FloatingActionButton InfoBtn = findViewById(R.id.InfoButton);
 
-
-        if(Build.VERSION.SDK_INT >= 23){
+        /*
+        Android 6.0 以上动态权限的申请
+         */
+        if(Build.VERSION.SDK_INT >= 23) {
             int REQUEST_CODE_CONTACT = 101;
             String[] permissions = {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -42,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        /*
+        文件夹的创建
+         */
+        File cacheDir = new File("/storage/emulated/0/MCA/");
+        if(!cacheDir.exists()){
+            cacheDir.mkdirs();
+        }
+
         /*
          创建按键监听器
          跳转至相应Act
