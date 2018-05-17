@@ -13,6 +13,7 @@ public class AllAnim {
     public static final int DIRECTION_FROM_CENTER = 2;
     public static final int DIRECTION_FROM_LEFT = 3;
     public static final int DIRECTION_FROM_TOP = 4;
+
     /*
     物体出现的过渡动画
      */
@@ -78,6 +79,9 @@ public class AllAnim {
         return animationSet;
     }
 
+    /*
+    物体淡出时的过渡动画
+     */
     public static AnimationSet showOut(long delayTime,long Duration, int Direction){
 
         AnimationSet animationSet = new AnimationSet(true);

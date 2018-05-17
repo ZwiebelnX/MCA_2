@@ -61,6 +61,7 @@ public class TestActivity extends AppCompatActivity {
         MainWin.setMlist(Mlist);
         MainWin.invalidate();
 
+        /*提交测试按钮监听器声明*/
         SubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,9 +69,13 @@ public class TestActivity extends AppCompatActivity {
                 List<Integer> Slist = MainWin.getSlist();
                 String url = "/storage/emulated/0/MCA/Result.mid";
                 if(Slist.size() != 7){
-                    Toast.makeText(TestActivity.this,"要把七个全部连完喔", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TestActivity.this,"要把七个全部连完喔", Toast.LENGTH_LONG).show();//当测试页面内七个图标没有连完时拒绝用户提交
                 }
                 else{
+                    /*
+                    生成连线的截图 测试结果的截图
+                    以及连线的音频文件
+                     */
                     try {
                         View dView = getWindow().getDecorView();
                         dView.setDrawingCacheEnabled(true);
@@ -95,6 +100,7 @@ public class TestActivity extends AppCompatActivity {
                     } catch (Exception e){
                         e.printStackTrace();
                     }
+                    /*隐藏操作按钮*/
                     findViewById(R.id.ShareButton_Test).setVisibility(View.VISIBLE);
                     findViewById(R.id.Redo_Cencel_Test).setVisibility(View.GONE);
                     findViewById(R.id.Redo_ReCreate_Test).setVisibility(View.GONE);
@@ -104,17 +110,23 @@ public class TestActivity extends AppCompatActivity {
                 }
             }
         });
+        /*提交按钮监听器声明结束*/
 
+        /*播放按钮监听器声明*/
         PlayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainWin.setSlist(MainWin.getLlist(),MainWin.getMlist());
                 List<Integer> Slist = MainWin.getSlist();
                 String url = "/storage/emulated/0/MCA/Result.mid";
-                if(Slist.isEmpty()){
+                if(Slist.isEmpty()){//没有连接元素时拒绝用户的播放操作
                     Toast.makeText(TestActivity.this,"请先至少链接一个元素~", Toast.LENGTH_LONG).show();
                 }
                 else{
+                    /*
+                    生成音频缓存文件
+                    在这里音频个数没有限制 可以动态生成
+                     */
                     try {
                         FileOutputStream fos = new FileOutputStream(url);
                         byte[] data = MidiUtils.Generate(Slist, 0);
@@ -122,7 +134,7 @@ public class TestActivity extends AppCompatActivity {
                         fos.flush();
                         fos.close();
                         MediaPlayer player = new MediaPlayer();
-                        player.setDataSource(url);
+                        player.setDataSource(url);//播放当前连线的连续音频
                         player.prepare();
                         player.start();
                     } catch (Exception e){
@@ -132,7 +144,12 @@ public class TestActivity extends AppCompatActivity {
 
             }
         });
+        /*播放按钮监听器声明结束*/
 
+        /*
+        操作展开按钮监听器声明
+        主要是动画方面
+         */
         RedoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +173,9 @@ public class TestActivity extends AppCompatActivity {
                 }
             }
         });
+        /*操作展开按钮监听器声明结束*/
 
+        /*分享按钮监听器声明*/
         ShareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,13 +188,16 @@ public class TestActivity extends AppCompatActivity {
                 dView.buildDrawingCache();
                 Bitmap bitmap = Bitmap.createBitmap(dView.getDrawingCache());
                 try{
-                    FileOutputStream fos2=new FileOutputStream("/storage/emulated/0/MCA/resultTest2.png");
+                    FileOutputStream fos2=new FileOutputStream("/storage/emulated/0/MCA/resultTest2.png");//获取测试结果截图
                     bitmap.compress(Bitmap.CompressFormat.PNG,100,fos2);
                     fos2.flush();
                     fos2.close();
                 } catch (Exception e){
                     e.printStackTrace();
                 }
+                /*
+                传递分享文件
+                 */
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 if(Build.VERSION.SDK_INT>=24){
                     ResultTest1 = FileProvider.getUriForFile(TestActivity.this,getPackageName()+".provider",new File("/storage/emulated/0/MCA/resultTest1.png"));
@@ -200,22 +222,27 @@ public class TestActivity extends AppCompatActivity {
                 }
             }
         });
+        /*分享按钮监听器声明结束*/
 
+        /*撤销按钮监听器声明*/
         findViewById(R.id.Redo_Reverst_Test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainWin.ReverstLlist();
             }
         });
+
+        /*重新生成图形按钮监听器声明*/
         findViewById(R.id.Redo_ReCreate_Test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainWin.ReCreateMlist();
-                TestBiz.getImg(MainWin.getMlist(), getResources());
+                TestBiz.getImg(MainWin.getMlist(), getResources());//重新设置图像
                 MainWin.setDrawMode(1);
                 MainWin.invalidate();
             }
         });
+        /*取消全部按钮按钮监听器声明*/
         findViewById(R.id.Redo_Cencel_Test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,6 +250,7 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
+        /*返回主页按钮监听器声明*/
         BackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,6 +259,7 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
+        /*进入时的过渡动画*/
         RedoBtn.startAnimation(AllAnim.showUp(0,400,AllAnim.DIRECTION_FROM_BUTTOM));
         PlayBtn.startAnimation(AllAnim.showUp(100,400,AllAnim.DIRECTION_FROM_BUTTOM));
         SubmitBtn.startAnimation(AllAnim.showUp(200,400,AllAnim.DIRECTION_FROM_BUTTOM));

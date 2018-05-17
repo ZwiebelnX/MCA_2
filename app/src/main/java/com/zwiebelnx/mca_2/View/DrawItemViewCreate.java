@@ -162,6 +162,9 @@ public class DrawItemViewCreate extends View {
     private float DownX, DownY;
     private float UpX, UpY;
 
+    /*
+    判断当前点击是否在图案上
+     */
     public int OnItem(float X, float Y) {
         for (int i = 0; i < Mlist.size(); i++) {
             float imgX = (float) Mlist.get(i).getcX();
@@ -174,6 +177,10 @@ public class DrawItemViewCreate extends View {
         return -1;
     }
 
+    /*
+    生成声音中间列表
+    用于缓存文件的生成和其他判断
+     */
     public void GenSlist() {
         Slist.clear();
         if(!Mlist.isEmpty()){
@@ -207,7 +214,7 @@ public class DrawItemViewCreate extends View {
                     try{
                         player.setDataSource(Mlist.get(StartItemIndex).getMusicFlieUrl());
                         player.prepare();
-                        player.start();
+                        player.start();//触摸在图案上时发出声音
                     } catch (Exception e){
                         e.printStackTrace();
                     }
@@ -219,12 +226,12 @@ public class DrawItemViewCreate extends View {
 
             }
             break;
-            case MotionEvent.ACTION_MOVE:{//移动操作 连线跟随用户的手
+            case MotionEvent.ACTION_MOVE:{
                 MoveTime = System.currentTimeMillis();
                 UpX = event.getX();
                 UpY = event.getY();
                 if(Math.abs(DownTime-MoveTime) > 400 && Math.sqrt(DownX-UpX)*(DownX-UpX)+(DownY-UpY)*(DownY-UpY) <=2000
-                        &&StartItemIndex != -1 && !isLongpress){
+                        &&StartItemIndex != -1 && !isLongpress){//判断当前操作是否为长按 是时进入移动模式 用户可以拖动图案
                     isLongpress = true;
                     Toast.makeText(super.getContext(), "移动模式", Toast.LENGTH_SHORT).show();
                 }
@@ -238,7 +245,7 @@ public class DrawItemViewCreate extends View {
                     }
                     return true;
                 }
-                else{
+                else{//不是长按时 进入连线模式
                     if(StartItemIndex != -1){
                         if(!Llist.isEmpty()){
                             if(Llist.get(Llist.size()-1).getEndItemIndex() == StartItemIndex){
@@ -249,7 +256,7 @@ public class DrawItemViewCreate extends View {
                                 return true;
                             }
                             else{
-                                Toast.makeText(super.getContext(),"请按顺序链接~",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(super.getContext(),"请按顺序链接~",Toast.LENGTH_SHORT).show();//限制在有第一个连接之后 用户必须按顺序连接
                                 return true;
                             }
                         }
@@ -272,7 +279,7 @@ public class DrawItemViewCreate extends View {
                     }
                 }
             }
-            case MotionEvent.ACTION_UP:{
+            case MotionEvent.ACTION_UP:{//离开屏幕时
                 UpX = event.getX();
                 UpY = event.getY();
                 EndItemIndex = OnItem(UpX, UpY);
@@ -282,7 +289,7 @@ public class DrawItemViewCreate extends View {
                             if(CreateBiz.isAvilable("Loop", EndItemIndex, Llist)){
                                 UpX = Mlist.get(EndItemIndex).getcX();
                                 UpY = Mlist.get(EndItemIndex).getcY();
-                                Line l = new Line(StartItemIndex, EndItemIndex);
+                                Line l = new Line(StartItemIndex, EndItemIndex);//连接两个图案
                                 Llist.add(l);
                                 isLongpress = false;
                                 DrawMode = 2;
@@ -290,7 +297,7 @@ public class DrawItemViewCreate extends View {
                                 return true;
                             }
                             else{
-                                Toast.makeText(super.getContext(), "不可以成环喔", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(super.getContext(), "不可以成环喔", Toast.LENGTH_SHORT).show();//不允许用户成环
                                 isLongpress = false;
                                 DrawMode = 1;
                                 invalidate();
@@ -298,8 +305,8 @@ public class DrawItemViewCreate extends View {
                             }
                         }
                         else{
-                            Toast.makeText(super.getContext(), "该结点已经被连接 请选择其他结点~", Toast.LENGTH_SHORT).show();
-                            isLongpress  = false;
+                            Toast.makeText(super.getContext(), "该结点已经被连接 请选择其他结点~", Toast.LENGTH_SHORT).show();//不允许用户连接已经被连接的图案
+                            isLongpress  = false;//在离开屏幕时重置长按标识
                             DrawMode = 1;
                             invalidate();
                             return true;
@@ -323,6 +330,10 @@ public class DrawItemViewCreate extends View {
         return true;
     }
 
+    /*
+    撤销操作
+    把上一个连线从链表中去除
+     */
     public void ReverstLlist(){
         DownX = DownY = UpX = UpY = 0;
         if(!Llist.isEmpty()){
@@ -331,17 +342,16 @@ public class DrawItemViewCreate extends View {
             invalidate();
         }
     }
+
+    /*
+    取消操作
+    清空所有连线
+     */
     public void CancelLlist(){
         DownX = DownY = UpX = UpY = 0;
         Llist.clear();
         DrawMode = 2;
         invalidate();
-    }
-    public void ReCreateMlist(){
-        Mlist.clear();
-        Llist.clear();
-        Mlist = new ArrayList<>();
-        Mlist = TestBiz.GenItemList();
     }
 
 }

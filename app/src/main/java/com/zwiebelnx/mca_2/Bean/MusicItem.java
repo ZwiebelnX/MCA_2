@@ -34,7 +34,7 @@ public class MusicItem{
     private Bitmap img;
     private String MusicFlieUrl;
 
-    public MusicItem() {
+    public MusicItem() {//无参构造器 在Test中被使用
         Random rand = new Random();
         for(;;){
             sound = rand.nextInt(42)+0x40;//生成音调0-41
@@ -165,7 +165,7 @@ public class MusicItem{
     }
 
 
-    public void MoveXY(int x, int y){
+    public void MoveXY(int x, int y){//移动图标并更新修正图标 在Create里被调用
         if(getShapeIndex()==1){
             X = x - 40;
             Y = y - 150;

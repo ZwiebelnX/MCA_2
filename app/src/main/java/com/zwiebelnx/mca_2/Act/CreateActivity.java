@@ -31,6 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
 
+
+/*
+自由创作的Activity
+ */
+
 public class CreateActivity extends AppCompatActivity {
     private static int ShapeIndex = 1;
     private static int ColorIndex = 1;
@@ -51,7 +56,7 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_create);
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {//创建固定音高的音频缓存文件
             try {
                 String url = "/storage/emulated/0/MCA/" + i + "pitch.mid";
                 List<Integer> Slist = new ArrayList<>();
@@ -71,19 +76,23 @@ public class CreateActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
+        /* 布局属性声明 */
         FloatingActionButton BackBtn = findViewById(R.id.BackButton_Create);
         Button ShareBtn = findViewById(R.id.ShareButton_Create);
         Button PlayBtn = findViewById(R.id.PlayButton_Create);
         ImageView PreView = findViewById(R.id.PreView);
-
         Button ItemShapeBtn = findViewById(R.id.ItemShapeButton);
         Button ItemColorBtn = findViewById(R.id.ItemColorButton);
         Button ItemBrightBtn = findViewById(R.id.ItemBrightButton);
         Button ItemPitchBtn = findViewById(R.id.ItemPitchButton);
-
         final DrawItemViewCreate MainWin = findViewById(R.id.MainWinCreate);
+        /* 布局属性声明结束 */
 
+        /*
+        布局动画设置
+        主要是进入本Activity时按钮的动画
+        以及单击按钮的展开动画
+         */
         ItemShapeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,7 +202,11 @@ public class CreateActivity extends AppCompatActivity {
                 }
             }
         });
+        /* 动画属性设置结束 */
 
+        /* 按钮点击监听器的声明 */
+
+        /* 形状按钮列表监听器声明 */
         Button[] ShapeBtnSet = {
                 findViewById(R.id.shape1),
                 findViewById(R.id.shape2),
@@ -206,7 +219,7 @@ public class CreateActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     int tag = (int)v.getTag();
-                    if(tag == 2){
+                    if(tag == 2){//矩形没有蓝色 选择蓝色时自动跳到黄色
                         findViewById(R.id.color3).setClickable(false);
                         Toast.makeText(CreateActivity.this, "矩形没有蓝色哟", Toast.LENGTH_LONG).show();
                         ColorIndex = 1;
@@ -219,7 +232,9 @@ public class CreateActivity extends AppCompatActivity {
                 }
             });
         }
+        /* 形状按钮列表监听器声明结束 */
 
+        /* 颜色按钮列表监听器声明 */
         Button[] ColorBtnSet = {
                 findViewById(R.id.color1),
                 findViewById(R.id.color2),
@@ -231,11 +246,13 @@ public class CreateActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     ColorIndex = (int)v.getTag();
-                    CreateBiz.refreshPreView(ShapeIndex, ColorIndex, BrightIndex,(ImageView)findViewById(R.id.PreView));
+                    CreateBiz.refreshPreView(ShapeIndex, ColorIndex, BrightIndex,(ImageView)findViewById(R.id.PreView));//布局上方预览图刷新
                 }
             });
         }
+        /* 颜色按钮列表监听器声明结束 */
 
+        /* 深浅按钮列表监听器声明 */
         Button[] BrightBtnSet = {
                 findViewById(R.id.bright1),
                 findViewById(R.id.bright2),
@@ -251,7 +268,9 @@ public class CreateActivity extends AppCompatActivity {
                 }
             });
         }
+        /* 深浅按钮列表监听器声明结束 */
 
+        /* 音高按钮列表监听器声明 */
         Button[] PitchBtnSet = {
                 findViewById(R.id.pitch1),
                 findViewById(R.id.pitch2),
@@ -270,7 +289,7 @@ public class CreateActivity extends AppCompatActivity {
                     try{
                         PitchIndex = tag;
                         MediaPlayer player = new MediaPlayer();
-                        SoundFileUrl = "/storage/emulated/0/MCA/"+tag+"pitch.mid";
+                        SoundFileUrl = "/storage/emulated/0/MCA/"+tag+"pitch.mid";//设置对应的缓存文件路径
                         player.setDataSource(SoundFileUrl);
                         player.prepare();
                         player.start();
@@ -280,33 +299,38 @@ public class CreateActivity extends AppCompatActivity {
                 }
             });
         }
+        /* 音高按钮列表监听器声明结束 */
 
+        /* 布局上方图形预览与添加按钮声明 */
         PreView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SoundFileUrl = "/storage/emulated/0/MCA/"+PitchIndex+"pitch.mid";
-                MusicItem musicItem = new MusicItem(ShapeIndex, ColorIndex, BrightIndex, PitchIndex, SoundFileUrl, getResources());
+                MusicItem musicItem = new MusicItem(ShapeIndex, ColorIndex, BrightIndex, PitchIndex, SoundFileUrl, getResources());//将当前选中的图形添加入链表
                 MainWin.getMlist().add(musicItem);
                 MainWin.setDrawMode(1);
                 MainWin.invalidate();
             }
         });
+        /* 添加图形按钮监听器声明结束 */
+
+        /* 播放音频按钮监听器声明 */
         PlayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainWin.GenSlist();
                 if(MainWin.getSlist().isEmpty()){
-                    Toast.makeText(CreateActivity.this, "请先连接再试听喔", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateActivity.this, "请先连接再试听喔", Toast.LENGTH_SHORT).show();//没有连接图形时点击播放的异常处理
                 }
                 else{
                     try {
-                        FileOutputStream fos = new FileOutputStream("/storage/emulated/0/MCA/ResultCreate.mid");
+                        FileOutputStream fos = new FileOutputStream("/storage/emulated/0/MCA/ResultCreate.mid");//生成播放连续音频缓存文件
                         byte[] data = MidiUtils.Generate(MainWin.getSlist(), 0);
                         fos.write(data);
                         fos.flush();
                         fos.close();
                         MediaPlayer player = new MediaPlayer();
-                        player.setDataSource("/storage/emulated/0/MCA/ResultCreate.mid");
+                        player.setDataSource("/storage/emulated/0/MCA/ResultCreate.mid");//播放音频
                         player.prepare();
                         player.start();
                     } catch (Exception e){
@@ -315,12 +339,18 @@ public class CreateActivity extends AppCompatActivity {
                 }
             }
         });
+        /* 播放音频按钮监听器声明结束 */
 
+        /* 分享按钮监听器声明 */
         ShareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri ResultCreateImg;
                 Uri ResultCreateMidi;
+
+                /*
+                生成截图和.mid音频文件
+                 */
                 View dView = getWindow().getDecorView();
                 dView.setDrawingCacheEnabled(true);
                 dView.destroyDrawingCache();
@@ -334,6 +364,9 @@ public class CreateActivity extends AppCompatActivity {
                 } catch (Exception e){
                     e.printStackTrace();
                 }
+                /*
+                传递分享信息
+                 */
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 if(Build.VERSION.SDK_INT>=24){
                     ResultCreateImg = FileProvider.getUriForFile(CreateActivity.this,getPackageName()+".provider",new File("/storage/emulated/0/MCA/ResultCreateImg.png"));
@@ -356,12 +389,14 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
+        /*撤销按钮监听器声明*/
         findViewById(R.id.Redo_Reverst_Create).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainWin.ReverstLlist();
             }
         });
+        /*删除全部结点按钮监听器声明 */
         findViewById(R.id.Redo_Cencel_Create).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -369,6 +404,7 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
+        /*返回主界面按钮监听器声明*/
         BackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -377,6 +413,10 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
+        /*
+        操作按钮的动画声明
+        包括点击时展开和关闭三个按钮
+         */
         findViewById(R.id.RedoButtonCreate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -396,6 +436,9 @@ public class CreateActivity extends AppCompatActivity {
                 }
             }
         });
+        /* 展开动画声明结束 */
+
+        /* 进入本Activity时按钮的过渡动画 */
         Button BtnBarSet[] = {ItemShapeBtn, ItemColorBtn, ItemBrightBtn, ItemPitchBtn, PlayBtn, ShareBtn};
         for(int i = 0; i < 6; i++){
             BtnBarSet[i].startAnimation(AllAnim.showUp(100*i,200,AllAnim.DIRECTION_FROM_BUTTOM));

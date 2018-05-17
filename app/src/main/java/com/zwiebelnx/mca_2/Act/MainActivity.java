@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView LogoMain = findViewById(R.id.LogoMain);
 
         /*
-         创建按键监听器
+         跳转按钮监听器声明
          跳转至相应Act
          */
         CreateBtn.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        /*跳转按钮监听器声明结束*/
 
+        /*进入主界面时的按钮和图标过渡动画*/
         LogoMain.startAnimation(AllAnim.showUp(0,300, AllAnim.DIRECTION_FROM_CENTER));
         findViewById(R.id.WelcomView).startAnimation(AllAnim.showUp(100, 300, AllAnim.DIRECTION_FROM_RIGHT));
         CreateBtn.startAnimation(AllAnim.showUp(200, 300, AllAnim.DIRECTION_FROM_RIGHT));
