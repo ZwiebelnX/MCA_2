@@ -209,6 +209,7 @@ public class CreateActivity extends AppCompatActivity {
                     if(tag == 2){
                         findViewById(R.id.color3).setClickable(false);
                         Toast.makeText(CreateActivity.this, "矩形没有蓝色哟", Toast.LENGTH_LONG).show();
+                        ColorIndex = 1;
                     }
                     else{
                         findViewById(R.id.color3).setClickable(true);

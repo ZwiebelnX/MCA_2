@@ -50,10 +50,10 @@ public class MusicItem{
             ColorIndex = rand.nextInt(3)+1;
         }
 
-        if(sound<=7){   //不同音调对应不同的颜色深浅
+        if(sound<=78){   //不同音调对应不同的颜色深浅
             BrightIndex = 1;
         }
-        else if(sound<=16){
+        else if(sound<=92){
             BrightIndex = 2;
         }
         else{
