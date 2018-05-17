@@ -20,8 +20,8 @@ import com.zwiebelnx.mca_2.Bean.Line;
 import com.zwiebelnx.mca_2.Bean.MusicItem;
 import com.zwiebelnx.mca_2.Biz.TestBiz;
 public class DrawItemViewTest extends View {
-    List<MusicItem> Mlist;
-    List<Integer> Slist;
+    private List<MusicItem> Mlist = new ArrayList<>();
+    private List<Integer> Slist = new ArrayList<>();
     List<Line> Llist = new ArrayList<>();
     private Paint paint;
     private static int DrawMode;//1=放置物品 2=画线
@@ -167,6 +167,7 @@ public class DrawItemViewTest extends View {
         return -1;
     }
 
+
     private List<Integer> SetSlist(List<Line> Llist, List<MusicItem> Mlist){
         List<Integer> Slist = new ArrayList<>();
         Slist.add(Mlist.get(Llist.get(0).getStartItemIndex()).getSound());
@@ -235,6 +236,9 @@ public class DrawItemViewTest extends View {
                     DownY = Mlist.get(StartItemIndex).getcY();
                     UpX = event.getX();
                     UpY = event.getY();
+                    if(!player.isPlaying()){
+                        player.release();
+                    }
                     DrawMode = 2;
                     invalidate();
                 }

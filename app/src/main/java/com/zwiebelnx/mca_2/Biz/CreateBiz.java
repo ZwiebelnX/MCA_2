@@ -3,6 +3,7 @@ package com.zwiebelnx.mca_2.Biz;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 
 import com.zwiebelnx.mca_2.Bean.Line;
 import com.zwiebelnx.mca_2.Bean.MusicItem;
@@ -18,30 +19,6 @@ import java.util.List;
  */
 
 public class CreateBiz {
-
-    /*
-     * 产生数量为7的图形链表
-     */
-    public static List<MusicItem> GenItemList(){
-        int x=250, y=600;
-        List<MusicItem> Mlist = new ArrayList<>();
-        MusicItem musicItem;
-        for(int i=0; i<7; i++){
-            musicItem = new MusicItem();
-            Mlist.add(musicItem);
-        }
-        for(int i=0; i<Mlist.size();i++){   //  图形不相互覆盖 这里采取的是简单平铺的方法
-            if(i<4){
-                Mlist.get(i).setX(Mlist.get(i).getX()+x*i);
-            }
-            else{
-                Mlist.get(i).setX(Mlist.get(i).getX()+x*(i-4));
-                Mlist.get(i).setY(Mlist.get(i).getY()+y);
-            }
-        }
-        return Mlist;
-    }
-
     /**
      * TestBiz.getImg:
      * 根据编号获取图形图片
@@ -50,19 +27,19 @@ public class CreateBiz {
      * B 1=黄 2=绿 3=蓝
      * C 1=深 2=中 3=浅
      */
-    public static List<MusicItem> getImg(List<MusicItem> Mlist, Resources res){
+    public static int getImg(int index){
 
-        Integer index;
         HashMap<Integer, Integer> imgMap = new HashMap<>();
-        Bitmap bitmap;
-        int id;
 
-        imgMap.put(111, R.drawable.bar_y_1);
+        imgMap.put(111,R.drawable.bar_y_1);
         imgMap.put(112,R.drawable.bar_y_2);
         imgMap.put(113,R.drawable.bar_y_3);
         imgMap.put(121,R.drawable.bar_g_1);
         imgMap.put(122,R.drawable.bar_g_2);
         imgMap.put(123,R.drawable.bar_g_3);
+        imgMap.put(131,R.drawable.bar_b_1);
+        imgMap.put(132,R.drawable.bar_b_2);
+        imgMap.put(133,R.drawable.bar_b_3);
 
         imgMap.put(211,R.drawable.rec_y_1);
         imgMap.put(212,R.drawable.rec_y_2);
@@ -81,15 +58,14 @@ public class CreateBiz {
         imgMap.put(332,R.drawable.circle_b_2);
         imgMap.put(333,R.drawable.circle_b_3);
 
-        for(int i=0; i<Mlist.size(); i++){
-            index = Mlist.get(i).getShapeIndex()*100
-                    +Mlist.get(i).getColorIndex()*10
-                    +Mlist.get(i).getBrightIndex();
-            id = imgMap.get(index);
-            bitmap = BitmapFactory.decodeResource(res, id);
-            Mlist.get(i).setImg(bitmap);
-        }
-        return Mlist;
+
+        return imgMap.get(index);
+    }
+
+    public static void refreshPreView(int ShapeIndex, int ColorIndex, int BrightIndex, ImageView PreView){
+        int index = ShapeIndex*100 + ColorIndex*10 + BrightIndex;
+        int Imgid = getImg(index);
+        PreView.setImageResource(Imgid);
     }
 
     /*

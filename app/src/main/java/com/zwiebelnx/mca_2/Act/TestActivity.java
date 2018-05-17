@@ -51,18 +51,23 @@ public class TestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 List<Integer> Slist = MainWin.getSlist();
                 String url = "/storage/emulated/0/MCA/Result.mid";
-                try {
-                    FileOutputStream fos = new FileOutputStream(url);
-                    byte[] data = MidiUtils.Generate(Slist, 0);
-                    fos.write(data);
-                    fos.flush();
-                    fos.close();
-                    MediaPlayer player = new MediaPlayer();
-                    player.setDataSource(url);
-                    player.prepare();
-                    player.start();
-                } catch (Exception e){
-                    e.printStackTrace();
+                if(Slist.isEmpty()){
+                    Toast.makeText(TestActivity.this,"要把七个全部连完喔", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        FileOutputStream fos = new FileOutputStream(url);
+                        byte[] data = MidiUtils.Generate(Slist, 0);
+                        fos.write(data);
+                        fos.flush();
+                        fos.close();
+                        MediaPlayer player = new MediaPlayer();
+                        player.setDataSource(url);
+                        player.prepare();
+                        player.start();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
                 MainWin.setTestResult(TestBiz.getTest(MainWin.getSlist(), getResources(), 0x4c));
                 MainWin.setDrawMode(3);
@@ -89,6 +94,7 @@ public class TestActivity extends AppCompatActivity {
                         player.setDataSource(url);
                         player.prepare();
                         player.start();
+                        player.release();
                     } catch (Exception e){
                         e.printStackTrace();
                     }

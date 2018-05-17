@@ -1,8 +1,12 @@
 package com.zwiebelnx.mca_2.Bean;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.zwiebelnx.mca_2.Act.CreateActivity;
+import com.zwiebelnx.mca_2.Biz.CreateBiz;
 import com.zwiebelnx.mca_2.Biz.Midi.MidiUtils;
 
 import java.io.File;
@@ -33,7 +37,7 @@ public class MusicItem{
     public MusicItem() {
         Random rand = new Random();
         for(;;){
-            sound = rand.nextInt(21)+1+0x40;//生成音调1-21
+            sound = rand.nextInt(42)+0x40;//生成音调0-41
             if(sound%2 == 0){
                 break;
             }
@@ -66,6 +70,19 @@ public class MusicItem{
         else{
             index++;
         }
+    }
+
+    public MusicItem(int ShapeIndex, int ColorIndex, int BrightIndex, int PitchIndex, String MusicFileUrl, Resources resources){
+        Random rand = new Random();
+        this.ShapeIndex = ShapeIndex;
+        this.ColorIndex = ColorIndex;
+        this.BrightIndex = BrightIndex;
+        sound = PitchIndex;
+        this.MusicFlieUrl = MusicFileUrl;
+        X = rand.nextInt(700);
+        Y = rand.nextInt(1000);
+        img = BitmapFactory.decodeResource(resources, CreateBiz.getImg(ShapeIndex*100+ColorIndex*10+BrightIndex));
+        currectXY();
     }
 
     /*
