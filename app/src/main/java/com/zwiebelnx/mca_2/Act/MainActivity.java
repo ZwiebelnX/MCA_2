@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        LogoMain.startAnimation(AllAnim.showUp(0,2000, AllAnim.DIRECTION_FROM_CENTER));
-        CreateBtn.startAnimation(AllAnim.showUp(200, 2000, AllAnim.DIRECTION_FROM_RIGHT));
-        TestBtn.startAnimation(AllAnim.showUp(400, 2000, AllAnim.DIRECTION_FROM_RIGHT));
-        InfoBtn.startAnimation(AllAnim.showUp(600, 2000, AllAnim.DIRECTION_FROM_RIGHT));
+        LogoMain.startAnimation(AllAnim.showUp(0,1000, AllAnim.DIRECTION_FROM_CENTER));
+        CreateBtn.startAnimation(AllAnim.showUp(200, 1000, AllAnim.DIRECTION_FROM_RIGHT));
+        TestBtn.startAnimation(AllAnim.showUp(400, 1000, AllAnim.DIRECTION_FROM_RIGHT));
+        InfoBtn.startAnimation(AllAnim.showUp(600, 1000, AllAnim.DIRECTION_FROM_RIGHT));
     }
 
     @Override
@@ -124,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
         /*
         动画处理
          */
-        LogoMain.startAnimation(AllAnim.showUp(0, 2000,AllAnim.DIRECTION_FROM_CENTER));
-        CreateBtn.startAnimation(AllAnim.showUp(200, 2000, AllAnim.DIRECTION_FROM_RIGHT));
-        TestBtn.startAnimation(AllAnim.showUp(400, 2000, AllAnim.DIRECTION_FROM_RIGHT));
-        InfoBtn.startAnimation(AllAnim.showUp(600, 2000, AllAnim.DIRECTION_FROM_RIGHT));
+        LogoMain.startAnimation(AllAnim.showUp(0, 1000,AllAnim.DIRECTION_FROM_CENTER));
+        CreateBtn.startAnimation(AllAnim.showUp(200, 1000, AllAnim.DIRECTION_FROM_RIGHT));
+        TestBtn.startAnimation(AllAnim.showUp(400, 1000, AllAnim.DIRECTION_FROM_RIGHT));
+        InfoBtn.startAnimation(AllAnim.showUp(600, 1000, AllAnim.DIRECTION_FROM_RIGHT));
     }
 }

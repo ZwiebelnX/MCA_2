@@ -74,7 +74,7 @@ public class DrawItemViewTest extends View {
         TestResult = testResult;
     }
 
-    public static void setDrawMode(int drawMode) {
+    public void setDrawMode(int drawMode) {
         DrawMode = drawMode;
     }
 
@@ -92,6 +92,10 @@ public class DrawItemViewTest extends View {
 
     public static int getDrawMode() {
         return DrawMode;
+    }
+
+    public List<Line> getLlist() {
+        return Llist;
     }
 
     /* END */
@@ -169,13 +173,16 @@ public class DrawItemViewTest extends View {
     }
 
 
-    private List<Integer> SetSlist(List<Line> Llist, List<MusicItem> Mlist){
+    public List<Integer> setSlist(List<Line> Llist, List<MusicItem> Mlist){
         List<Integer> Slist = new ArrayList<>();
-        Slist.add(Mlist.get(Llist.get(0).getStartItemIndex()).getSound());
-        Slist.add(Mlist.get(Llist.get(0).getEndItemIndex()).getSound());
-        for(int i = 1; i < Llist.size(); i++){
-            Slist.add(Mlist.get(Llist.get(i).getEndItemIndex()).getSound());
+        if(!Llist.isEmpty()){
+            Slist.add(Mlist.get(Llist.get(0).getStartItemIndex()).getSound());
+            Slist.add(Mlist.get(Llist.get(0).getEndItemIndex()).getSound());
+            for(int i = 1; i < Llist.size(); i++){
+                Slist.add(Mlist.get(Llist.get(i).getEndItemIndex()).getSound());
+            }
         }
+        this.Slist = Slist;
         return Slist;
     }
     /**
@@ -266,9 +273,6 @@ public class DrawItemViewTest extends View {
                                 Llist.add(l);
                                 DrawMode = 2;
                                 invalidate();
-                                if(Llist.size() == 6){
-                                    Slist = SetSlist(Llist,Mlist);
-                                }
                             }
                             else{
                                 DownX=DownY=UpX=UpY=0;
@@ -290,5 +294,26 @@ public class DrawItemViewTest extends View {
             }
         }
         return true;
+    }
+
+    public void ReverstLlist(){
+        DownX = DownY = UpX = UpY = 0;
+        if(!Llist.isEmpty()){
+            Llist.remove(Llist.size()-1);
+            DrawMode = 2;
+            invalidate();
+        }
+    }
+    public void CancelLlist(){
+        DownX = DownY = UpX = UpY = 0;
+        Llist.clear();
+        DrawMode = 2;
+        invalidate();
+    }
+    public void ReCreateMlist(){
+        Mlist.clear();
+        Llist.clear();
+        Mlist = new ArrayList<>();
+        Mlist = TestBiz.GenItemList();
     }
 }

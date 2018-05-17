@@ -11,6 +11,8 @@ public class AllAnim {
     public static final int DIRECTION_FROM_BUTTOM = 0;
     public static final int DIRECTION_FROM_RIGHT = 1;
     public static final int DIRECTION_FROM_CENTER = 2;
+    public static final int DIRECTION_FROM_LEFT = 3;
+    public static final int DIRECTION_FROM_TOP = 4;
     /*
     物体出现的过渡动画
      */
@@ -29,7 +31,7 @@ public class AllAnim {
 
             case 1:{
                 translate = new TranslateAnimation(
-                        TranslateAnimation.RELATIVE_TO_SELF,2f, TranslateAnimation.RELATIVE_TO_SELF,0f,
+                        TranslateAnimation.RELATIVE_TO_SELF,0.5f, TranslateAnimation.RELATIVE_TO_SELF,0f,
                         TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f);
                 translate.setDuration(Duration);
             }
@@ -37,11 +39,28 @@ public class AllAnim {
 
             case 2:{
                 translate = new TranslateAnimation(
-                        TranslateAnimation.RELATIVE_TO_SELF,2f, TranslateAnimation.RELATIVE_TO_SELF,0f,
+                        TranslateAnimation.RELATIVE_TO_SELF,0.5f, TranslateAnimation.RELATIVE_TO_SELF,0f,
                         TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f);
                 translate.setDuration(Duration);
             }
             break;
+
+            case 3:{
+                translate = new TranslateAnimation(
+                        TranslateAnimation.RELATIVE_TO_SELF,-0.5f, TranslateAnimation.RELATIVE_TO_SELF,0f,
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f);
+                translate.setDuration(Duration);
+            }
+            break;
+
+            case 4:{
+                translate = new TranslateAnimation(
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f,
+                        TranslateAnimation.RELATIVE_TO_SELF,-0.5f, TranslateAnimation.RELATIVE_TO_SELF,0f);
+                translate.setDuration(Duration);
+            }
+            break;
+
             default:{
                 translate = new TranslateAnimation(
                         TranslateAnimation.RELATIVE_TO_SELF,2f, TranslateAnimation.RELATIVE_TO_SELF,0f,
@@ -74,7 +93,7 @@ public class AllAnim {
 
             case 1:{
                 translate = new TranslateAnimation(
-                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,2f,
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0.5f,
                         TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f);
                 translate.setDuration(Duration);
             }
@@ -82,8 +101,23 @@ public class AllAnim {
 
             case 2:{
                 translate = new TranslateAnimation(
-                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,2f,
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0.5f,
                         TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f);
+                translate.setDuration(Duration);
+            }
+            break;
+            case 3:{
+                translate = new TranslateAnimation(
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,-0.5f,
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f);
+                translate.setDuration(Duration);
+            }
+            break;
+
+            case 4:{
+                translate = new TranslateAnimation(
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,0f,
+                        TranslateAnimation.RELATIVE_TO_SELF,0f, TranslateAnimation.RELATIVE_TO_SELF,-0.5f);
                 translate.setDuration(Duration);
             }
             break;
