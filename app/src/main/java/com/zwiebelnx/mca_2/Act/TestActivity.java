@@ -77,10 +77,6 @@ public class TestActivity extends AppCompatActivity {
                         MainWin.setTestResult(TestBiz.getTest(MainWin.getSlist(), getResources(), 0x4c));
                         MainWin.setDrawMode(3);
                         MainWin.invalidate();
-                        FileOutputStream fos2=new FileOutputStream("/storage/emulated/0/MCA/resultTest2.png");
-                        bitmap.compress(Bitmap.CompressFormat.PNG,100,fos2);
-                        fos2.flush();
-                        fos2.close();
                         FileOutputStream fos3 = new FileOutputStream(url);
                         byte[] data = MidiUtils.Generate(Slist, 0);
                         fos3.write(data);
@@ -155,25 +151,36 @@ public class TestActivity extends AppCompatActivity {
                 Uri ResultTest1;
                 Uri ResultTest2;
                 Uri ResultMidi;
+                View dView = getWindow().getDecorView();
+                dView.setDrawingCacheEnabled(true);
+                dView.destroyDrawingCache();
+                dView.buildDrawingCache();
+                Bitmap bitmap = Bitmap.createBitmap(dView.getDrawingCache());
+                try{
+                    FileOutputStream fos2=new FileOutputStream("/storage/emulated/0/MCA/resultTest2.png");
+                    bitmap.compress(Bitmap.CompressFormat.PNG,100,fos2);
+                    fos2.flush();
+                    fos2.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 if(Build.VERSION.SDK_INT>=24){
                     ResultTest1 = FileProvider.getUriForFile(TestActivity.this,getPackageName()+".provider",new File("/storage/emulated/0/MCA/resultTest1.png"));
                     ResultTest2 = FileProvider.getUriForFile(TestActivity.this,getPackageName()+".provider",new File("/storage/emulated/0/MCA/resultTest2.png"));
                     ResultMidi = FileProvider.getUriForFile(TestActivity.this,getPackageName()+".provider",new File("/storage/emulated/0/MCA/Result.mid"));
-                    //grantUriPermission(BuildConfig.APPLICATION_ID,uri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    //grantUriPermission(BuildConfig.APPLICATION_ID,uriimg,Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 }else {
                     ResultTest1 = Uri.fromFile(new File("/storage/emulated/0/MCA/resultTest1.png"));
                     ResultTest2 = Uri.fromFile(new File("/storage/emulated/0/MCA/resultTest2.png"));
-                    ResultMidi = Uri.fromFile(new File("/storage/emulated/0/MCA/result.mid"));
+                    ResultMidi = Uri.fromFile(new File("/storage/emulated/0/MCA/Result.mid"));
                 }
                 ArrayList<Uri> uris=new ArrayList();
                 uris.add(ResultTest1);
                 uris.add(ResultTest2);
                 uris.add(ResultMidi);
                 intent.setType("*/*");
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,uris);
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                 try {
                     startActivity(intent);
                 }catch (Exception e){
