@@ -174,145 +174,174 @@ public class DrawItemViewCreate extends View {
         return -1;
     }
 
-    public List<Integer> SetSlist(List<Line> Llist, List<MusicItem> Mlist) {
+    public void GenSlist() {
+        Slist.clear();
         if(!Mlist.isEmpty()){
-            Slist.add(Mlist.get(Llist.get(0).getStartItemIndex()).getSound());
-            Slist.add(Mlist.get(Llist.get(0).getEndItemIndex()).getSound());
-            for (int i = 1; i < Llist.size(); i++) {
-                Slist.add(Mlist.get(Llist.get(i).getEndItemIndex()).getSound());
+            if(!Llist.isEmpty()){
+                Slist.add((Mlist.get(Llist.get(0).getStartItemIndex()).getSound())*2+0x40);
+                Slist.add((Mlist.get(Llist.get(0).getEndItemIndex()).getSound())*2+0x40);
+                for (int i = 1; i < Llist.size(); i++) {
+                    Slist.add((Mlist.get(Llist.get(i).getEndItemIndex()).getSound())*2+0x40);
+                }
             }
         }
-        return Slist;
     }
 
     /**
      * DrawItemView的触摸事件：
      * 处理用户按下、移动、抬起时 画布上连线以及各种限制
      */
+    private static long DownTime = 0;
+    private static long MoveTime = 0;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        long DownTime = 0;
-        long MoveTime = 0;
+
         MediaPlayer player = new MediaPlayer();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:{
+                DownTime = System.currentTimeMillis();
                 DownX = event.getX();
                 DownY = event.getY();
                 StartItemIndex = OnItem(DownX, DownY);
-                if (CreateBiz.isAvilable("StartIndex", StartItemIndex, Llist)) {
-                    if (!Llist.isEmpty()) {
-                        if (Llist.get(Llist.size() - 1).getEndItemIndex() != StartItemIndex) {//限制 必须按顺序连接
-                            Toast.makeText(super.getContext(), "请按顺序连接~", Toast.LENGTH_SHORT).show();
-                            DownX = DownY = UpX = UpY = 0;
-                            DrawMode = 2;
-                            invalidate();
-                            OnItem = false;
-                            return true;
-                        }
+                if(StartItemIndex != -1){
+                    try{
+                        player.setDataSource(Mlist.get(StartItemIndex).getMusicFlieUrl());
+                        player.prepare();
+                        player.start();
+                    } catch (Exception e){
+                        e.printStackTrace();
                     }
-                    if(StartItemIndex != -1){
-                        OnItem = true;
-                        DownTime = System.currentTimeMillis();
-                        try {
-                            player.setDataSource(Mlist.get(StartItemIndex).getMusicFlieUrl());
-                            player.prepare();
-                            player.start();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else{
-                        OnItem = false;
-                    }
+                    OnItem = true;
+                }
+                else{
+                    OnItem = false;
+                }
 
-                    return true;
-                }
-                else{//限制 一个结点只能作为起点和终点各一次
-                    DownX=DownY=UpX=UpY=0;
-                    Toast.makeText(super.getContext(),"该结点已被链接 请重新选择~", Toast.LENGTH_SHORT).show();
-                    DrawMode = 2;
-                    invalidate();
-                }
             }
+            break;
             case MotionEvent.ACTION_MOVE:{//移动操作 连线跟随用户的手
-                if(OnItem){
-                    DownX = Mlist.get(StartItemIndex).getcX();
-                    DownY = Mlist.get(StartItemIndex).getcY();
-                    UpX = event.getX();
-                    UpY = event.getY();
-                    MoveTime = System.currentTimeMillis();
-                    if(Math.abs(DownX-UpX) <=70 && Math.abs(DownY-UpY) <=70&& !isLongpress){
-                        if(Math.abs(DownTime-MoveTime) > 500){
-                            Toast.makeText(super.getContext(), "移动模式", Toast.LENGTH_SHORT).show();
-                            isLongpress = true;
-                        }
-                        else{
-                            isLongpress = false;
-                        }
-                    }
-                    if(isLongpress){
-                        Mlist.get(StartItemIndex).MoveXY((int)UpX, (int)UpY);
-                        DrawMode = 1;
-                        invalidate();
-                    }
-                    else{
-                        DrawMode = 2;
-                        invalidate();
-                    }
+                MoveTime = System.currentTimeMillis();
+                UpX = event.getX();
+                UpY = event.getY();
+                if(Math.abs(DownTime-MoveTime) > 400 && Math.sqrt(DownX-UpX)*(DownX-UpX)+(DownY-UpY)*(DownY-UpY) <=2000
+                        &&StartItemIndex != -1 && !isLongpress){
+                    isLongpress = true;
+                    Toast.makeText(super.getContext(), "移动模式", Toast.LENGTH_SHORT).show();
                 }
-                return true;
-            }
-            case MotionEvent.ACTION_UP:{
                 if(isLongpress){
-                    isLongpress = false;
+                    Mlist.get(StartItemIndex).MoveXY((int)UpX, (int)UpY);
+                    DrawMode = 1;
+                    invalidate();
+                    if(!player.isPlaying()){
+                        player.reset();
+                        player.release();
+                    }
                     return true;
                 }
                 else{
-                    if(OnItem){
-                        UpX = event.getX();
-                        UpY = event.getY();
-                        EndItemIndex = OnItem(UpX,UpY);
-                        if(StartItemIndex == -1|| EndItemIndex == -1 || StartItemIndex==EndItemIndex){//起点 终点不是图形或者起点等于终点时不允许连线
-                            OnItem = false;
-                            DownX=DownY=UpX=UpY=0;
-                            invalidate();
-                        }
-                        else{
-                            if(TestBiz.isAvilable("EndIndex", EndItemIndex, Llist)){//连接两个节点 将连线加入连线列表
-                                if(TestBiz.isAvilable("Loop", EndItemIndex, Llist)){
-                                    UpX = Mlist.get(EndItemIndex).getcX();
-                                    UpY = Mlist.get(EndItemIndex).getcY();
-                                    OnItem = false;
-                                    Llist.add(new Line(StartItemIndex,EndItemIndex));
-                                    DrawMode = 2;
-                                    invalidate();
-                                }
-                                else{
-                                    DownX=DownY=UpX=UpY=0;
-                                    Toast.makeText(super.getContext(),"不可以成环喔~", Toast.LENGTH_SHORT).show();
-                                    DrawMode = 2;
-                                    invalidate();
-                                }
-
-                            }
-                            else{
-                                DownX=DownY=UpX=UpY=0;
-                                Toast.makeText(super.getContext(),"该结点已经被连接 请重新选择~", Toast.LENGTH_SHORT).show();
+                    if(StartItemIndex != -1){
+                        if(!Llist.isEmpty()){
+                            if(Llist.get(Llist.size()-1).getEndItemIndex() == StartItemIndex){
+                                DownX = Mlist.get(StartItemIndex).getcX();
+                                DownY = Mlist.get(StartItemIndex).getcY();
                                 DrawMode = 2;
                                 invalidate();
+                                return true;
+                            }
+                            else{
+                                Toast.makeText(super.getContext(),"请按顺序链接~",Toast.LENGTH_SHORT).show();
+                                return true;
                             }
                         }
-                        return true;
+                        else{
+                            DownX = Mlist.get(StartItemIndex).getcX();
+                            DownY = Mlist.get(StartItemIndex).getcY();
+                            DrawMode = 2;
+                            invalidate();
+                            if(!player.isPlaying()){
+                                player.reset();
+                                player.release();
+                            }
+                            return true;
+                        }
                     }
                     else{
-                        DownX=DownY=UpX=UpY=0;
-                        DrawMode = 2;
+                        DrawMode = 1;
                         invalidate();
+                        return true;
                     }
+                }
+            }
+            case MotionEvent.ACTION_UP:{
+                UpX = event.getX();
+                UpY = event.getY();
+                EndItemIndex = OnItem(UpX, UpY);
+                if(!isLongpress){
+                    if(EndItemIndex != -1 && EndItemIndex != StartItemIndex){
+                        if(CreateBiz.isAvilable("EndIndex", EndItemIndex, Llist)){
+                            if(CreateBiz.isAvilable("Loop", EndItemIndex, Llist)){
+                                UpX = Mlist.get(EndItemIndex).getcX();
+                                UpY = Mlist.get(EndItemIndex).getcY();
+                                Line l = new Line(StartItemIndex, EndItemIndex);
+                                Llist.add(l);
+                                isLongpress = false;
+                                DrawMode = 2;
+                                invalidate();
+                                return true;
+                            }
+                            else{
+                                Toast.makeText(super.getContext(), "不可以成环喔", Toast.LENGTH_SHORT).show();
+                                isLongpress = false;
+                                DrawMode = 1;
+                                invalidate();
+                                return true;
+                            }
+                        }
+                        else{
+                            Toast.makeText(super.getContext(), "该结点已经被连接 请选择其他结点~", Toast.LENGTH_SHORT).show();
+                            isLongpress  = false;
+                            DrawMode = 1;
+                            invalidate();
+                            return true;
+                        }
+                    }
+                    else{
+                        isLongpress = false;
+                        DrawMode = 1;
+                        invalidate();
+                        return true;
+                    }
+                }
+                else{
+                    isLongpress = false;
+                    DrawMode = 1;
+                    invalidate();
+                    return true;
                 }
             }
         }
         return true;
+    }
+
+    public void ReverstLlist(){
+        DownX = DownY = UpX = UpY = 0;
+        if(!Llist.isEmpty()){
+            Llist.remove(Llist.size()-1);
+            DrawMode = 2;
+            invalidate();
+        }
+    }
+    public void CancelLlist(){
+        DownX = DownY = UpX = UpY = 0;
+        Llist.clear();
+        DrawMode = 2;
+        invalidate();
+    }
+    public void ReCreateMlist(){
+        Mlist.clear();
+        Llist.clear();
+        Mlist = new ArrayList<>();
+        Mlist = TestBiz.GenItemList();
     }
 
 }

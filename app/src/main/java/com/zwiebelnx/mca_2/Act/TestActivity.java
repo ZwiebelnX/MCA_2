@@ -37,6 +37,12 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_test);
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         Button SubmitBtn = findViewById(R.id.SubmitButton_Test);
         Button PlayBtn = findViewById(R.id.PlayButton_Test);
         FloatingActionButton BackBtn = findViewById(R.id.BackButton_Test);
@@ -89,6 +95,12 @@ public class TestActivity extends AppCompatActivity {
                     } catch (Exception e){
                         e.printStackTrace();
                     }
+                    findViewById(R.id.ShareButton_Test).setVisibility(View.VISIBLE);
+                    findViewById(R.id.Redo_Cencel_Test).setVisibility(View.GONE);
+                    findViewById(R.id.Redo_ReCreate_Test).setVisibility(View.GONE);
+                    findViewById(R.id.Redo_Reverst_Test).setVisibility(View.GONE);
+                    findViewById(R.id.RedoButtonTest).setVisibility(View.GONE);
+                    isRedoExtend = false;
                 }
             }
         });
@@ -125,9 +137,9 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(isRedoExtend){
-                    findViewById(R.id.Redo_Reverst_Test).startAnimation(AllAnim.showOut(0,300,AllAnim.DIRECTION_FROM_RIGHT));
-                    findViewById(R.id.Redo_Cencel_Test).startAnimation(AllAnim.showOut(100,300,AllAnim.DIRECTION_FROM_BUTTOM));
-                    findViewById(R.id.Redo_ReCreate_Test).setAnimation(AllAnim.showOut(200,300,AllAnim.DIRECTION_FROM_LEFT));
+                    findViewById(R.id.Redo_Reverst_Test).startAnimation(AllAnim.showOut(0,200,AllAnim.DIRECTION_FROM_RIGHT));
+                    findViewById(R.id.Redo_Cencel_Test).startAnimation(AllAnim.showOut(50,200,AllAnim.DIRECTION_FROM_BUTTOM));
+                    findViewById(R.id.Redo_ReCreate_Test).setAnimation(AllAnim.showOut(100,200,AllAnim.DIRECTION_FROM_LEFT));
                     findViewById(R.id.Redo_Reverst_Test).setVisibility(View.GONE);
                     findViewById(R.id.Redo_Cencel_Test).setVisibility(View.GONE);
                     findViewById(R.id.Redo_ReCreate_Test).setVisibility(View.GONE);
@@ -137,9 +149,9 @@ public class TestActivity extends AppCompatActivity {
                     findViewById(R.id.Redo_Reverst_Test).setVisibility(View.VISIBLE);
                     findViewById(R.id.Redo_Cencel_Test).setVisibility(View.VISIBLE);
                     findViewById(R.id.Redo_ReCreate_Test).setVisibility(View.VISIBLE);
-                    findViewById(R.id.Redo_Reverst_Test).startAnimation(AllAnim.showUp(0,300,AllAnim.DIRECTION_FROM_RIGHT));
-                    findViewById(R.id.Redo_Cencel_Test).startAnimation(AllAnim.showUp(100,300,AllAnim.DIRECTION_FROM_BUTTOM));
-                    findViewById(R.id.Redo_ReCreate_Test).setAnimation(AllAnim.showUp(200,300,AllAnim.DIRECTION_FROM_LEFT));
+                    findViewById(R.id.Redo_Reverst_Test).startAnimation(AllAnim.showUp(0,200,AllAnim.DIRECTION_FROM_RIGHT));
+                    findViewById(R.id.Redo_Cencel_Test).startAnimation(AllAnim.showUp(50,200,AllAnim.DIRECTION_FROM_BUTTOM));
+                    findViewById(R.id.Redo_ReCreate_Test).setAnimation(AllAnim.showUp(100,200,AllAnim.DIRECTION_FROM_LEFT));
                     isRedoExtend = true;
                 }
             }
@@ -219,7 +231,10 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
+        RedoBtn.startAnimation(AllAnim.showUp(0,400,AllAnim.DIRECTION_FROM_BUTTOM));
+        PlayBtn.startAnimation(AllAnim.showUp(100,400,AllAnim.DIRECTION_FROM_BUTTOM));
+        SubmitBtn.startAnimation(AllAnim.showUp(200,400,AllAnim.DIRECTION_FROM_BUTTOM));
+        BackBtn.startAnimation(AllAnim.showUp(100,500,AllAnim.DIRECTION_FROM_LEFT));
+
     }
-
-
 }

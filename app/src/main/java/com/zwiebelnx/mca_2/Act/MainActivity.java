@@ -27,11 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
-        Button CreateBtn = findViewById(R.id.CreateButton);
-        Button TestBtn = findViewById(R.id.TestButton);
-        FloatingActionButton InfoBtn = findViewById(R.id.InfoButton);
-        ImageView LogoMain = findViewById(R.id.LogoMain);
-
 
         /*
         Android 6.0 以上动态权限的申请
@@ -56,41 +51,11 @@ public class MainActivity extends AppCompatActivity {
             cacheDir.mkdirs();
         }
 
-        /*
-         创建按键监听器
-         跳转至相应Act
-         */
-        CreateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent ToCreate = new Intent(MainActivity.this, CreateActivity.class);
-                startActivity(ToCreate);
-            }
-        });
-        TestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent ToTest = new Intent(MainActivity.this, TestActivity.class);
-                startActivity(ToTest);
-            }
-        });
-        InfoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        LogoMain.startAnimation(AllAnim.showUp(0,1000, AllAnim.DIRECTION_FROM_CENTER));
-        CreateBtn.startAnimation(AllAnim.showUp(200, 1000, AllAnim.DIRECTION_FROM_RIGHT));
-        TestBtn.startAnimation(AllAnim.showUp(400, 1000, AllAnim.DIRECTION_FROM_RIGHT));
-        InfoBtn.startAnimation(AllAnim.showUp(600, 1000, AllAnim.DIRECTION_FROM_RIGHT));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        setContentView(R.layout.layout_main);
         Button CreateBtn = findViewById(R.id.CreateButton);
         Button TestBtn = findViewById(R.id.TestButton);
         FloatingActionButton InfoBtn = findViewById(R.id.InfoButton);
@@ -121,12 +86,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        动画处理
-         */
-        LogoMain.startAnimation(AllAnim.showUp(0, 1000,AllAnim.DIRECTION_FROM_CENTER));
-        CreateBtn.startAnimation(AllAnim.showUp(200, 1000, AllAnim.DIRECTION_FROM_RIGHT));
-        TestBtn.startAnimation(AllAnim.showUp(400, 1000, AllAnim.DIRECTION_FROM_RIGHT));
-        InfoBtn.startAnimation(AllAnim.showUp(600, 1000, AllAnim.DIRECTION_FROM_RIGHT));
+        LogoMain.startAnimation(AllAnim.showUp(0,300, AllAnim.DIRECTION_FROM_CENTER));
+        findViewById(R.id.WelcomView).startAnimation(AllAnim.showUp(100, 300, AllAnim.DIRECTION_FROM_RIGHT));
+        CreateBtn.startAnimation(AllAnim.showUp(200, 300, AllAnim.DIRECTION_FROM_RIGHT));
+        TestBtn.startAnimation(AllAnim.showUp(300, 300, AllAnim.DIRECTION_FROM_RIGHT));
+        InfoBtn.startAnimation(AllAnim.showUp(400, 300, AllAnim.DIRECTION_FROM_RIGHT));
+
     }
 }

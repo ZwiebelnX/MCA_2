@@ -1,10 +1,14 @@
 package com.zwiebelnx.mca_2.Act;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.shapes.Shape;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -17,6 +21,7 @@ import com.zwiebelnx.mca_2.Anim.AllAnim;
 import com.zwiebelnx.mca_2.Bean.MusicItem;
 import com.zwiebelnx.mca_2.Biz.CreateBiz;
 import com.zwiebelnx.mca_2.Biz.Midi.MidiUtils;
+import com.zwiebelnx.mca_2.Biz.TestBiz;
 import com.zwiebelnx.mca_2.R;
 import com.zwiebelnx.mca_2.View.DrawItemViewCreate;
 
@@ -37,6 +42,7 @@ public class CreateActivity extends AppCompatActivity {
     private static boolean ColorExtend = false;
     private static boolean BrightExtend = false;
     private static boolean PitchExtend = false;
+    private static boolean isRedoExtend = false;
 
 
     @Override
@@ -45,25 +51,26 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_create);
 
-        File CreateChache = new File("/storage/emulated/0/MCA/cacheCreate/");
-        if(!CreateChache.exists()){
-            CreateChache.mkdirs();
-            for(int i = 0;i <7; i++){
-                try{
-                    String url = "/storage/emulated/0/MCA/cacheCreate/"+i+"pitch.mid";
-                    List<Integer> Slist = new ArrayList<>();
-                    Slist.add(0x40+i*2);
-                    FileOutputStream fos = new FileOutputStream(url);
-                    byte[] data = MidiUtils.Generate(Slist, 0);
-                    fos.write(data);
-                    fos.flush();
-                    fos.close();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        for (int i = 0; i < 7; i++) {
+            try {
+                String url = "/storage/emulated/0/MCA/" + i + "pitch.mid";
+                List<Integer> Slist = new ArrayList<>();
+                Slist.add(0x40 + i * 2);
+                FileOutputStream fos = new FileOutputStream(url);
+                byte[] data = MidiUtils.Generate(Slist, 0);
+                fos.write(data);
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
 
         FloatingActionButton BackBtn = findViewById(R.id.BackButton_Create);
         Button ShareBtn = findViewById(R.id.ShareButton_Create);
@@ -222,8 +229,7 @@ public class CreateActivity extends AppCompatActivity {
             ColorBtnSet[i-1].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int tag = (int)v.getTag();
-                    ColorIndex = tag;
+                    ColorIndex = (int)v.getTag();
                     CreateBiz.refreshPreView(ShapeIndex, ColorIndex, BrightIndex,(ImageView)findViewById(R.id.PreView));
                 }
             });
@@ -239,8 +245,7 @@ public class CreateActivity extends AppCompatActivity {
             BrightBtnSet[i-1].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int tag = (int)v.getTag();
-                    BrightIndex = tag;
+                    BrightIndex = (int)v.getTag();
                     CreateBiz.refreshPreView(ShapeIndex, ColorIndex, BrightIndex, (ImageView)findViewById(R.id.PreView));
                 }
             });
@@ -261,10 +266,10 @@ public class CreateActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     int tag = (int)v.getTag();
-                    PitchIndex = 0x40+tag*2;
                     try{
+                        PitchIndex = tag;
                         MediaPlayer player = new MediaPlayer();
-                        SoundFileUrl = "/storage/emulated/0/MCA/cacheCreate/"+tag+"pitch.mid";
+                        SoundFileUrl = "/storage/emulated/0/MCA/"+tag+"pitch.mid";
                         player.setDataSource(SoundFileUrl);
                         player.prepare();
                         player.start();
@@ -278,29 +283,29 @@ public class CreateActivity extends AppCompatActivity {
         PreView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SoundFileUrl = "/storage/emulated/0/MCA/cacheCreate/"+PitchIndex+"pitch.mid";
+                SoundFileUrl = "/storage/emulated/0/MCA/"+PitchIndex+"pitch.mid";
                 MusicItem musicItem = new MusicItem(ShapeIndex, ColorIndex, BrightIndex, PitchIndex, SoundFileUrl, getResources());
                 MainWin.getMlist().add(musicItem);
-                MainWin.setDrawMode(2);
+                MainWin.setDrawMode(1);
                 MainWin.invalidate();
             }
         });
         PlayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainWin.SetSlist(MainWin.getLlist(),MainWin.getMlist());
+                MainWin.GenSlist();
                 if(MainWin.getSlist().isEmpty()){
                     Toast.makeText(CreateActivity.this, "请先连接再试听喔", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     try {
-                        FileOutputStream fos = new FileOutputStream("/storage/emulated/0/MCA/cacheCreate/Result.mid");
+                        FileOutputStream fos = new FileOutputStream("/storage/emulated/0/MCA/ResultCreate.mid");
                         byte[] data = MidiUtils.Generate(MainWin.getSlist(), 0);
                         fos.write(data);
                         fos.flush();
                         fos.close();
                         MediaPlayer player = new MediaPlayer();
-                        player.setDataSource("/storage/emulated/0/MCA/cacheCreate/Result.mid");
+                        player.setDataSource("/storage/emulated/0/MCA/ResultCreate.mid");
                         player.prepare();
                         player.start();
                     } catch (Exception e){
@@ -309,6 +314,94 @@ public class CreateActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ShareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri ResultCreateImg;
+                Uri ResultCreateMidi;
+                View dView = getWindow().getDecorView();
+                dView.setDrawingCacheEnabled(true);
+                dView.destroyDrawingCache();
+                dView.buildDrawingCache();
+                Bitmap bitmap = Bitmap.createBitmap(dView.getDrawingCache());
+                try{
+                    FileOutputStream fos2=new FileOutputStream("/storage/emulated/0/MCA/ResultCreateImg.png");
+                    bitmap.compress(Bitmap.CompressFormat.PNG,100,fos2);
+                    fos2.flush();
+                    fos2.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                if(Build.VERSION.SDK_INT>=24){
+                    ResultCreateImg = FileProvider.getUriForFile(CreateActivity.this,getPackageName()+".provider",new File("/storage/emulated/0/MCA/ResultCreateImg.png"));
+                    ResultCreateMidi = FileProvider.getUriForFile(CreateActivity.this,getPackageName()+".provider",new File("/storage/emulated/0/MCA/ResultCreate.mid"));
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }else {
+                    ResultCreateImg = Uri.fromFile(new File("/storage/emulated/0/MCA/ResultCreateImg.png"));
+                    ResultCreateMidi = Uri.fromFile(new File("/storage/emulated/0/MCA/ResultCreate.mid"));
+                }
+                ArrayList<Uri> uris=new ArrayList();
+                uris.add(ResultCreateImg);
+                uris.add(ResultCreateMidi);
+                intent.setType("*/*");
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+                try {
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        findViewById(R.id.Redo_Reverst_Create).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainWin.ReverstLlist();
+            }
+        });
+        findViewById(R.id.Redo_Cencel_Create).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainWin.CancelLlist();
+            }
+        });
+
+        BackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent BackToMain = new Intent("com.zwiebelnx.mca.BACKTOMAIN");
+                startActivity(BackToMain);
+            }
+        });
+
+        findViewById(R.id.RedoButtonCreate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isRedoExtend){
+                    findViewById(R.id.Redo_Reverst_Create).startAnimation(AllAnim.showOut(0,100,AllAnim.DIRECTION_FROM_BUTTOM));
+                    findViewById(R.id.Redo_Cencel_Create).startAnimation(AllAnim.showOut(50,100,AllAnim.DIRECTION_FROM_BUTTOM));
+                    findViewById(R.id.Redo_Reverst_Create).setVisibility(View.GONE);
+                    findViewById(R.id.Redo_Cencel_Create).setVisibility(View.GONE);
+                    isRedoExtend = false;
+                }
+                else {
+                    findViewById(R.id.Redo_Reverst_Create).setVisibility(View.VISIBLE);
+                    findViewById(R.id.Redo_Cencel_Create).setVisibility(View.VISIBLE);
+                    findViewById(R.id.Redo_Reverst_Create).startAnimation(AllAnim.showUp(50,100,AllAnim.DIRECTION_FROM_BUTTOM));
+                    findViewById(R.id.Redo_Cencel_Create).startAnimation(AllAnim.showUp(0,100,AllAnim.DIRECTION_FROM_BUTTOM));
+                    isRedoExtend = true;
+                }
+            }
+        });
+        Button BtnBarSet[] = {ItemShapeBtn, ItemColorBtn, ItemBrightBtn, ItemPitchBtn, PlayBtn, ShareBtn};
+        for(int i = 0; i < 6; i++){
+            BtnBarSet[i].startAnimation(AllAnim.showUp(100*i,200,AllAnim.DIRECTION_FROM_BUTTOM));
+        }
+        BackBtn.startAnimation(AllAnim.showUp(0,800,AllAnim.DIRECTION_FROM_LEFT));
+        PreView.startAnimation(AllAnim.showUp(0,800,AllAnim.DIRECTION_FROM_TOP));
+        findViewById(R.id.RedoButtonCreate).startAnimation(AllAnim.showUp(0,800,AllAnim.DIRECTION_FROM_RIGHT));
 
     }
 }

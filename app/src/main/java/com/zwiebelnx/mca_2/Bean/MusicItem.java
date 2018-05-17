@@ -77,7 +77,7 @@ public class MusicItem{
         this.ShapeIndex = ShapeIndex;
         this.ColorIndex = ColorIndex;
         this.BrightIndex = BrightIndex;
-        sound = PitchIndex;
+        sound = PitchIndex ;
         this.MusicFlieUrl = MusicFileUrl;
         X = rand.nextInt(700);
         Y = rand.nextInt(1000);
