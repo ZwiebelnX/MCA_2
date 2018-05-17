@@ -9,6 +9,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -118,8 +119,14 @@ public class DrawItemViewCreate extends View {
              在TestActivity的OnCreate ResetBtn的OnClick中调用
              */
             case 1: {
-                for (MusicItem m : Mlist) {
-                    canvas.drawBitmap(m.getImg(), m.getX(), m.getY(), paint);
+                if (!Llist.isEmpty()) {
+                    for (Line l : Llist) {
+                        canvas.drawLine(Mlist.get(l.getStartItemIndex()).getcX(), Mlist.get(l.getStartItemIndex()).getcY(),
+                                Mlist.get(l.getEndItemIndex()).getcX(), Mlist.get(l.getEndItemIndex()).getcY(), paint);
+                    }
+                }
+                for (int i = 0; i < Mlist.size(); i++) {
+                    canvas.drawBitmap(Mlist.get(i).getImg(), ((float) Mlist.get(i).getX()), ((float) Mlist.get(i).getY()), paint);
                 }
             }
             break;
@@ -129,7 +136,6 @@ public class DrawItemViewCreate extends View {
              在类内的TouchEvent和RedoBtn的OnClick中调用
              */
             case 2: {
-                DownX = DownY = UpX = UpY = 0;
                 canvas.drawLine(DownX, DownY, UpX, UpY, paint);
                 if (!Llist.isEmpty()) {
                     for (Line l : Llist) {
@@ -152,6 +158,7 @@ public class DrawItemViewCreate extends View {
     private static boolean OnItem = false;
     private int StartItemIndex = -1;
     private int EndItemIndex = -1;
+    private static boolean isLongpress = false;
     private float DownX, DownY;
     private float UpX, UpY;
 
@@ -184,6 +191,8 @@ public class DrawItemViewCreate extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        long DownTime = 0;
+        long MoveTime = 0;
         MediaPlayer player = new MediaPlayer();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:{
@@ -197,15 +206,23 @@ public class DrawItemViewCreate extends View {
                             DownX = DownY = UpX = UpY = 0;
                             DrawMode = 2;
                             invalidate();
+                            OnItem = false;
                             return true;
                         }
                     }
-                    try {
-                        player.setDataSource(Mlist.get(StartItemIndex).getMusicFlieUrl());
-                        player.prepare();
-                        player.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if(StartItemIndex != -1){
+                        OnItem = true;
+                        DownTime = System.currentTimeMillis();
+                        try {
+                            player.setDataSource(Mlist.get(StartItemIndex).getMusicFlieUrl());
+                            player.prepare();
+                            player.start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        OnItem = false;
                     }
 
                     return true;
@@ -223,47 +240,75 @@ public class DrawItemViewCreate extends View {
                     DownY = Mlist.get(StartItemIndex).getcY();
                     UpX = event.getX();
                     UpY = event.getY();
-                    DrawMode = 2;
-                    invalidate();
+                    MoveTime = System.currentTimeMillis();
+                    if(Math.abs(DownX-UpX) <=70 && Math.abs(DownY-UpY) <=70&& !isLongpress){
+                        if(Math.abs(DownTime-MoveTime) > 500){
+                            Toast.makeText(super.getContext(), "移动模式", Toast.LENGTH_SHORT).show();
+                            isLongpress = true;
+                        }
+                        else{
+                            isLongpress = false;
+                        }
+                    }
+                    if(isLongpress){
+                        Mlist.get(StartItemIndex).MoveXY((int)UpX, (int)UpY);
+                        DrawMode = 1;
+                        invalidate();
+                    }
+                    else{
+                        DrawMode = 2;
+                        invalidate();
+                    }
                 }
                 return true;
             }
             case MotionEvent.ACTION_UP:{
-                if(OnItem){
-                    UpX = event.getX();
-                    UpY = event.getY();
-                    EndItemIndex = OnItem(UpX,UpY);
-                    if(StartItemIndex == -1|| EndItemIndex == -1 || StartItemIndex==EndItemIndex){//起点 终点不是图形或者起点等于终点时不允许连线
-                        OnItem = false;
-                        DownX=DownY=UpX=UpY=0;
-                        invalidate();
-                    }
-                    else{
-                        if(TestBiz.isAvilable("EndIndex", EndItemIndex, Llist)){//连接两个节点 将连线加入连线列表
-                            if(TestBiz.isAvilable("Loop", EndItemIndex, Llist)){
-                                UpX = Mlist.get(EndItemIndex).getcX();
-                                UpY = Mlist.get(EndItemIndex).getcY();
-                                OnItem = false;
-                                Llist.add(new Line(StartItemIndex,EndItemIndex));
-                                DrawMode = 2;
-                                invalidate();
+                if(isLongpress){
+                    isLongpress = false;
+                    return true;
+                }
+                else{
+                    if(OnItem){
+                        UpX = event.getX();
+                        UpY = event.getY();
+                        EndItemIndex = OnItem(UpX,UpY);
+                        if(StartItemIndex == -1|| EndItemIndex == -1 || StartItemIndex==EndItemIndex){//起点 终点不是图形或者起点等于终点时不允许连线
+                            OnItem = false;
+                            DownX=DownY=UpX=UpY=0;
+                            invalidate();
+                        }
+                        else{
+                            if(TestBiz.isAvilable("EndIndex", EndItemIndex, Llist)){//连接两个节点 将连线加入连线列表
+                                if(TestBiz.isAvilable("Loop", EndItemIndex, Llist)){
+                                    UpX = Mlist.get(EndItemIndex).getcX();
+                                    UpY = Mlist.get(EndItemIndex).getcY();
+                                    OnItem = false;
+                                    Llist.add(new Line(StartItemIndex,EndItemIndex));
+                                    DrawMode = 2;
+                                    invalidate();
+                                }
+                                else{
+                                    DownX=DownY=UpX=UpY=0;
+                                    Toast.makeText(super.getContext(),"不可以成环喔~", Toast.LENGTH_SHORT).show();
+                                    DrawMode = 2;
+                                    invalidate();
+                                }
+
                             }
                             else{
                                 DownX=DownY=UpX=UpY=0;
-                                Toast.makeText(super.getContext(),"不可以成环喔~", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(super.getContext(),"该结点已经被连接 请重新选择~", Toast.LENGTH_SHORT).show();
                                 DrawMode = 2;
                                 invalidate();
                             }
-
                         }
-                        else{
-                            DownX=DownY=UpX=UpY=0;
-                            Toast.makeText(super.getContext(),"该结点已经被连接 请重新选择~", Toast.LENGTH_SHORT).show();
-                            DrawMode = 2;
-                            invalidate();
-                        }
+                        return true;
                     }
-                    return true;
+                    else{
+                        DownX=DownY=UpX=UpY=0;
+                        DrawMode = 2;
+                        invalidate();
+                    }
                 }
             }
         }

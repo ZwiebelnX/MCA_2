@@ -278,6 +278,7 @@ public class CreateActivity extends AppCompatActivity {
         PreView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoundFileUrl = "/storage/emulated/0/MCA/cacheCreate/"+PitchIndex+"pitch.mid";
                 MusicItem musicItem = new MusicItem(ShapeIndex, ColorIndex, BrightIndex, PitchIndex, SoundFileUrl, getResources());
                 MainWin.getMlist().add(musicItem);
                 MainWin.setDrawMode(2);

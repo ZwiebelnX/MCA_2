@@ -165,6 +165,17 @@ public class MusicItem{
     }
 
 
+    public void MoveXY(int x, int y){
+        if(getShapeIndex()==1){
+            X = x - 40;
+            Y = y - 150;
+        }
+        else{
+            X = x - 60;
+            Y = y - 60;
+        }
+        currectXY();
+    }
     /* END */
 
     /*

@@ -62,8 +62,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/PlayButton_Test"
+        app:layout_constraintHorizontal_bias="0.096"
         app:layout_constraintStart_toEndOf="@+id/PlayButton_Test"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.zwiebelnx.mca_2.View.DrawItemViewTest
             android:id="@+id/MainWinTest"
@@ -73,15 +75,55 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/RedoButton"
         android:layout_width="52dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:clickable="true"
-        android:src="?android:attr/listChoiceIndicatorSingle"
-        app:layout_constraintBottom_toTopOf="@+id/PlayButton_Test"
-        app:layout_constraintEnd_toEndOf="@+id/PlayButton_Test"
-        app:layout_constraintStart_toEndOf="@+id/PlayButton_Test" />
+        android:src="?android:attr/findOnPagePreviousDrawable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/MainWinBoxTest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.911" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/Redo_Cencel_Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/RedoButton"
+        app:layout_constraintEnd_toEndOf="@+id/RedoButton"
+        app:layout_constraintStart_toStartOf="@+id/RedoButton"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/Redo_Reverst_Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/RedoButton"
+        app:layout_constraintEnd_toStartOf="@+id/RedoButton"
+        app:layout_constraintTop_toTopOf="@+id/RedoButton"
+        app:layout_constraintVertical_bias="0.583"
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/Redo_ReCreate_Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/RedoButton"
+        app:layout_constraintStart_toEndOf="@+id/RedoButton"
+        app:layout_constraintTop_toTopOf="@+id/RedoButton"
+        app:layout_constraintVertical_bias="0.583"
+        app:srcCompat="@android:drawable/ic_menu_rotate" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -12,7 +12,7 @@
         android:id="@+id/WelcomView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="44dp"
         android:text="欢迎使用"
         android:textAlignment="center"
         android:textSize="50dp"
@@ -22,10 +22,9 @@
 
     <Button
         android:id="@+id/CreateButton"
-        android:layout_width="384dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
         android:alpha="1"
         android:autoLink="none|web"
         android:background="@drawable/button_shape"
@@ -38,10 +37,9 @@
 
     <Button
         android:id="@+id/TestButton"
-        android:layout_width="384dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="92dp"
-        android:layout_marginStart="8dp"
         android:alpha="1"
         android:background="@drawable/button_shape"
         android:text="性格测试"

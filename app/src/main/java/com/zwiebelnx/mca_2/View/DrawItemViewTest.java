@@ -11,6 +11,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -133,7 +134,7 @@ public class DrawItemViewTest extends View {
              */
             case 3:{
                 TextPaint textPaint = new TextPaint(paint);
-                StaticLayout staticLayout = new StaticLayout(TestResult, textPaint, getWidth(), Layout.Alignment.ALIGN_NORMAL,
+                StaticLayout staticLayout = new StaticLayout(TestResult, textPaint, 600, Layout.Alignment.ALIGN_NORMAL,
                         1.0f, 0f, true);
                 canvas.translate(500,400);
                 //canvas.clipRect(0,0,0,600);
